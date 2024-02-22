@@ -1,0 +1,111 @@
+* Block Type = 96well
+* Chemistry = SYBR_GREEN
+* Experiment File Name = D:\Applied Biosystems\StepOne Software v2.3\experiments\Lardelli\Karissa\20240112 KB naglu genotyping salbutamol exp 1-3.eds
+* Experiment Run End Time = 2024-01-12 07:20:34 AM PST
+* Instrument Type = steponeplus
+* Passive Reference = 
+
+[Results]
+Well	Sample Name	Target Name	Task	Reporter	Quencher	RQ	RQ Min	RQ Max	Cт	Cт Mean	Cт SD	ΔCт	ΔCт Mean	ΔCт SE	HK Control ΔCт Mean	HK Control ΔCт SE	ΔΔCт	Automatic Ct Threshold	Ct Threshold	Automatic Baseline	Baseline Start	Baseline End	Efficiency	Tm1	Tm2	Tm3	Comments	EXPFAIL	MTP
+A1		naglu	NTC	SYBR	None				Undetermined									true	4290.6543	true	3	34	1	88.9143	74.8863			N	Y
+A2	het pos control	naglu	UNKNOWN	SYBR	None				Undetermined									true	4290.6543	true	3	34	1	88.9337	74.0925			Y	Y
+A3	hom pos control	naglu	UNKNOWN	SYBR	None				Undetermined									true	4290.6543	true	3	34	1	88.9597	73.9005			Y	Y
+A4	Sample 1	naglu	UNKNOWN	SYBR	None				20.7196	20.7196								true	4290.6543	true	3	15	1	83.4841	75.751	80.635		N	Y
+A5	Sample 2	naglu	UNKNOWN	SYBR	None				23.1438	23.1438								true	4290.6543	true	3	18	1	81.453				N	N
+A6	Sample 3	naglu	UNKNOWN	SYBR	None				21.0628	21.0628								true	4290.6543	true	3	15	1	83.7102	75.8755	80.8613		N	Y
+A7	Sample 4	naglu	UNKNOWN	SYBR	None				23.0759	23.0759								true	4290.6543	true	3	18	1	83.7051	76.0883	80.8615		N	Y
+A8	Sample 5	naglu	UNKNOWN	SYBR	None				22.9643	22.9643								true	4290.6543	true	3	16	1	83.4192	76.0054			N	Y
+A9	Sample 6	naglu	UNKNOWN	SYBR	None				18.8711	18.8711								true	4290.6543	true	3	15	1	83.76	75.8242	80.8095		N	Y
+A10	Sample 7	naglu	UNKNOWN	SYBR	None				22.7358	22.7358								true	4290.6543	true	3	17	1	83.9825	76.1483	81.032		N	Y
+A11	Sample 8	naglu	UNKNOWN	SYBR	None				23.0526	23.0526								true	4290.6543	true	3	17	1	81.5404				N	N
+A12	Sample 9	naglu	UNKNOWN	SYBR	None				24.4464	24.4464								true	4290.6543	true	3	19	1	81.5599				N	N
+B1	Sample 10	naglu	UNKNOWN	SYBR	None				21.535	21.535								true	4290.6543	true	3	16	1	83.6295	75.8022	80.6816		N	Y
+B2	Sample 11	naglu	UNKNOWN	SYBR	None				23.0441	23.0441								true	4290.6543	true	3	16	1	83.6467	76.0228	80.8004		N	Y
+B3	Sample 12	naglu	UNKNOWN	SYBR	None				24.7714	24.7714								true	4290.6543	true	3	20	1	81.3295				N	N
+B4	Sample 13	naglu	UNKNOWN	SYBR	None				23.5246	23.5246								true	4290.6543	true	3	19	1	83.5847	76.1569			N	Y
+B5	Sample 14	naglu	UNKNOWN	SYBR	None				22.3566	22.3566								true	4290.6543	true	3	17	1	83.6926	76.1631	80.8436		N	Y
+B6	Sample 15	naglu	UNKNOWN	SYBR	None				21.3895	21.3895								true	4290.6543	true	3	14	1	83.7091	76.0779	80.8601		N	Y
+B7	Sample 16	naglu	UNKNOWN	SYBR	None				24.2587	24.2587								true	4290.6543	true	3	18	1	81.3704				N	N
+B8	Sample 17	naglu	UNKNOWN	SYBR	None				18.6274	18.6274								true	4290.6543	true	3	12	1	83.4181	75.6997	80.5745		N	Y
+B9	Sample 18	naglu	UNKNOWN	SYBR	None				20.9091	20.9091								true	4290.6543	true	3	14	1	81.3194				N	N
+B10	Sample 19	naglu	UNKNOWN	SYBR	None				22.0398	22.0398								true	4290.6543	true	3	12	1	83.9814	76.1472	81.0308		N	Y
+B11	Sample 20	naglu	UNKNOWN	SYBR	None				22.5876	22.5876								true	4290.6543	true	3	15	1	81.4399				N	N
+B12	Sample 21	naglu	UNKNOWN	SYBR	None				21.2161	21.2161								true	4290.6543	true	3	16	1	83.7958	75.9661	80.847		N	Y
+C1	Sample 22	naglu	UNKNOWN	SYBR	None				20.001	20.001								true	4290.6543	true	3	16	1	81.0888				N	N
+C2	Sample 23	naglu	UNKNOWN	SYBR	None				27.8211	27.8211								true	4290.6543	true	3	20	1	83.3411	76.5304			N	Y
+C3	Sample 24	naglu	UNKNOWN	SYBR	None				26.704	26.704								true	4290.6543	true	3	18	1	81.4319	88.8598			N	Y
+C4	Sample 25	naglu	UNKNOWN	SYBR	None				23.3704	23.3704								true	4290.6543	true	3	16	1	83.5841	76.258	80.8368		N	Y
+C5	Sample 26	naglu	UNKNOWN	SYBR	None				21.1114	21.1114								true	4290.6543	true	3	16	1	83.6933	75.7568	80.8443		N	Y
+C6	Sample 27	naglu	UNKNOWN	SYBR	None				19.9244	19.9244								true	4290.6543	true	3	16	1	81.2665				N	N
+C7	Sample 28	naglu	UNKNOWN	SYBR	None				20.8699	20.8699								true	4290.6543	true	3	16	1	83.5038	75.6838	80.5586		N	Y
+C8	Sample 29	naglu	UNKNOWN	SYBR	None				23.5559	23.5559								true	4290.6543	true	3	10	1	81.1831				N	N
+C9	Sample 30	naglu	UNKNOWN	SYBR	None				20.5713	20.5713								true	4290.6543	true	3	15	1	83.7618	75.9277	80.8113		N	Y
+C10	Sample 31	naglu	UNKNOWN	SYBR	None				20.6678	20.6678								true	4290.6543	true	3	12	1	83.6755	75.9431	80.8267		N	Y
+C11	Sample 32	naglu	UNKNOWN	SYBR	None				22.9025	22.9025								true	4290.6543	true	3	15	1	83.8809	76.1529	80.9321		N	Y
+C12	Sample 33	naglu	UNKNOWN	SYBR	None				22.2336	22.2336								true	4290.6543	true	3	16	1	81.4564				N	N
+D1	Sample 34	naglu	UNKNOWN	SYBR	None				23.2914	23.2914								true	4290.6543	true	3	19	1	83.6308	76.1085	80.7845		N	Y
+D2	Sample 35	naglu	UNKNOWN	SYBR	None				20.562	20.562								true	4290.6543	true	3	14	1	81.1041				N	N
+D3	Sample 36	naglu	UNKNOWN	SYBR	None				22.5848	22.5848								true	4290.6543	true	3	19	1	81.0255				N	N
+D4	Sample 37	naglu	UNKNOWN	SYBR	None				21.8871	21.8871								true	4290.6543	true	3	16	1	83.4817	75.952	80.6326		N	Y
+D5	Sample 38	naglu	UNKNOWN	SYBR	None				22.5779	22.5779								true	4290.6543	true	3	16	1	83.7957	75.961	80.9467		N	Y
+D6	Sample 39	naglu	UNKNOWN	SYBR	None				21.5913	21.5913								true	4290.6543	true	3	12	1	81.2658				N	N
+D7	Sample 40	naglu	UNKNOWN	SYBR	None				21.1224	21.1224								true	4290.6543	true	3	16	1	81.0671				N	N
+D8	Sample 41	naglu	UNKNOWN	SYBR	None				24.2858	24.2858								true	4290.6543	true	3	19	1	81.284				N	N
+D9	Sample 42	naglu	UNKNOWN	SYBR	None				20.5547	20.5547								true	4290.6543	true	3	15	1	81.4224				N	N
+D10	Sample 43	naglu	UNKNOWN	SYBR	None				23.2002	23.2002								true	4290.6543	true	3	19	1	83.98	76.3494	81.1313		N	Y
+D11	Sample 44	naglu	UNKNOWN	SYBR	None				20.9673	20.9673								true	4290.6543	true	3	14	1	83.6782	75.8485	80.7294		N	Y
+D12	Sample 45	naglu	UNKNOWN	SYBR	None				22.0508	22.0508								true	4290.6543	true	3	15	1	83.7945	76.0665	80.8457		N	Y
+E1	Sample 46	naglu	UNKNOWN	SYBR	None				23.0928	23.0928								true	4290.6543	true	3	16	1	83.6315	76.0075	80.7852		N	Y
+E2	Sample 47	naglu	UNKNOWN	SYBR	None				21.5511	21.5511								true	4290.6543	true	3	16	1	81.1034				N	N
+E3	Sample 48	naglu	UNKNOWN	SYBR	None				19.872	19.872								true	4290.6543	true	3	14	1	83.3665	75.6334	80.5174		N	Y
+E4	Sample 49	naglu	UNKNOWN	SYBR	None				24.3396	24.3396								true	4290.6543	true	3	18	1	81.3442				N	N
+E5	Sample 50	naglu	UNKNOWN	SYBR	None				22.8076	22.8076								true	4290.6543	true	3	16	1	83.7963	76.0634	80.9473		N	Y
+E6	Sample 51	naglu	UNKNOWN	SYBR	None				20.2112	20.2112								true	4290.6543	true	3	14	1	81.2652				N	N
+E7	Sample 52	naglu	UNKNOWN	SYBR	None				20.5307	20.5307								true	4290.6543	true	3	15	1	83.5051	75.6851	80.5599		N	Y
+E8	Sample 53	naglu	UNKNOWN	SYBR	None				19.8076	19.8076								true	4290.6543	true	3	13	1	80.9787				N	N
+E9	Sample 54	naglu	UNKNOWN	SYBR	None				20.9251	20.9251								true	4290.6543	true	3	15	1	83.7631	75.929	80.9144		N	Y
+E10	Sample 55	naglu	UNKNOWN	SYBR	None				22.1383	22.1383								true	4290.6543	true	3	17	1	81.5376				N	N
+E11	Sample 56	naglu	UNKNOWN	SYBR	None				20.8572	20.8572								true	4290.6543	true	3	14	1	81.2385				N	N
+E12	Sample 57	naglu	UNKNOWN	SYBR	None				21.3228	21.3228								true	4290.6543	true	3	13	1	83.7939	75.9642	80.845		N	Y
+F1	Sample 58	naglu	UNKNOWN	SYBR	None				20.9041	20.9041								true	4290.6543	true	3	14	1	81.1925				N	N
+F2	Sample 59	naglu	UNKNOWN	SYBR	None				19.606	19.606								true	4290.6543	true	3	14	1	83.4408	75.5119	80.4929		N	Y
+F3	Sample 60	naglu	UNKNOWN	SYBR	None				20.5876	20.5876								true	4290.6543	true	3	16	1	81.1286				N	N
+F4	Sample 61	naglu	UNKNOWN	SYBR	None				21.3353	21.3353								true	4290.6543	true	3	18	1	83.4803	75.849	80.6313		N	Y
+F5	Sample 62	naglu	UNKNOWN	SYBR	None				20.6653	20.6653								true	4290.6543	true	3	14	1	83.6953	75.8605	80.7445		N	Y
+F6	Sample 63	naglu	UNKNOWN	SYBR	None				18.8567	18.8567								true	4290.6543	true	3	12	1	83.6047	75.8718	80.654		N	Y
+F7	Sample 64	naglu	UNKNOWN	SYBR	None				21.2359	21.2359								true	4290.6543	true	3	15	1	81.0684				N	N
+F8	Sample 65	naglu	UNKNOWN	SYBR	None				21.5459	21.5459								true	4290.6543	true	3	14	1	81.0796				N	N
+F9	Sample 66	naglu	UNKNOWN	SYBR	None				21.7258	21.7258								true	4290.6543	true	3	16	1	81.4237				N	N
+F10	Sample 67	naglu	UNKNOWN	SYBR	None				20.7246	20.7246								true	4290.6543	true	3	15	1	83.877	76.1446	80.9265		N	Y
+F11	Sample 68	naglu	UNKNOWN	SYBR	None				21.1965	21.1965								true	4290.6543	true	3	16	1	81.3408				N	N
+F12	Sample 69	naglu	UNKNOWN	SYBR	None				20.025	20.025								true	4290.6543	true	3	16	1	81.3528				N	N
+G1	Sample 70	naglu	UNKNOWN	SYBR	None				22.2846	22.2846								true	4290.6543	true	3	16	1	81.2948				N	N
+G2	Sample 71	naglu	UNKNOWN	SYBR	None				20.9816	20.9816								true	4290.6543	true	3	14	1	81.0004				N	N
+G3	Sample 72	naglu	UNKNOWN	SYBR	None				23.4341	23.4341								true	4290.6543	true	3	16	1	81.3328				N	N
+G4	Sample 73	naglu	UNKNOWN	SYBR	None				22.2891	22.2891								true	4290.6543	true	3	18	1	83.5814	76.1536	80.7324		N	Y
+G5	Sample 74	naglu	UNKNOWN	SYBR	None				25.3185	25.3185								true	4290.6543	true	3	19	1	84.0012	76.5734	89.1904		N	Y
+G6	Sample 75	naglu	UNKNOWN	SYBR	None				19.608	19.608								true	4290.6543	true	3	12	1	83.6041	75.7693	80.6533		N	Y
+G7	Sample 76	naglu	UNKNOWN	SYBR	None				20.6636	20.6636								true	4290.6543	true	3	15	1	83.5064	75.6865	80.5612		N	Y
+G8	Sample 77	naglu	UNKNOWN	SYBR	None				20.377	20.377								true	4290.6543	true	3	13	1	81.0789				N	N
+G9	Sample 78	naglu	UNKNOWN	SYBR	None				20.97	20.97								true	4290.6543	true	3	13	1	83.8662	76.0321	80.9157		N	Y
+G10	Sample 79	naglu	UNKNOWN	SYBR	None				24.9713	24.9713								true	4290.6543	true	3	20	1	84.1815	76.6526	89.2687		N	Y
+G11	Sample 80	naglu	UNKNOWN	SYBR	None				21.6686	21.6686								true	4290.6543	true	3	16	1	81.4432				N	N
+G12	Sample 81	naglu	UNKNOWN	SYBR	None				23.4728	23.4728								true	4290.6543	true	3	15	1	81.2504				N	N
+H1	Sample 82	naglu	UNKNOWN	SYBR	None				23.3236	23.3236								true	4290.6543	true	3	16	1	83.7352	76.0096	80.8889		N	Y
+H2	Sample 83	naglu	UNKNOWN	SYBR	None				21.197	21.197								true	4290.6543	true	3	14	1	81.203				N	N
+H3	Sample 84	naglu	UNKNOWN	SYBR	None				23.5933	23.5933								true	4290.6543	true	3	18	1	81.3335				N	N
+H4	Sample 85	naglu	UNKNOWN	SYBR	None				22.6213	22.6213								true	4290.6543	true	3	16	1	81.2404				N	N
+H5	Sample 86	naglu	UNKNOWN	SYBR	None				24.8163	24.8163								true	4290.6543	true	3	19	1	81.6617				N	N
+H6	Sample 87	naglu	UNKNOWN	SYBR	None				18.9727	18.9727								true	4290.6543	true	3	14	1	81.1613				N	N
+H7	Sample 88	naglu	UNKNOWN	SYBR	None				22.9444	22.9444								true	4290.6543	true	3	16	1	83.7103	76.0934	80.8667		N	Y
+H8	Sample 89	naglu	UNKNOWN	SYBR	None				20.3349	20.3349								true	4290.6543	true	3	14	1	83.414	75.6956	80.5704		N	Y
+H9	Sample 90	naglu	UNKNOWN	SYBR	None				27.5943	27.5943								true	4290.6543	true	3	22	1	84.3757	77.2537	89.361		N	Y
+H10	Sample 91	naglu	UNKNOWN	SYBR	None				28.0356	28.0356								true	4290.6543	true	3	22	1	82.0442	89.3696			N	Y
+H11	Sample 92	naglu	UNKNOWN	SYBR	None				Undetermined									true	4290.6543	true	3	32	1	89.2736	74.7328			Y	Y
+H12	Sample 93	naglu	UNKNOWN	SYBR	None				Undetermined									true	4290.6543	true	3	32	1	89.2827	75.8604			Y	Y
+
+Analysis Type = Singleplex
+Endogenous Control = naglu
+RQ Min/Max Confidence Level = 95.0
+Reference Sample = Sample 1
+

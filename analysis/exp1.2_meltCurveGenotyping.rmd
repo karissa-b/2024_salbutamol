@@ -1,0 +1,203 @@
+---
+title: "exp1.2_meltCurveGenotyping"
+author: "Karissa Barthelson"
+date: "2023-08-23"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+```{r}
+library(tidyverse)
+library(readxl)
+library(magrittr)
+library(scales)
+
+theme_set(theme_classic())
+```
+
+# Introduction
+
+In this page, i will analyse the melt curve data generated on the qPCR machine to genotype at the *naglu* A603 site. In this genotyping assay, I amplify a ~70 bp region over the mutation site in each fish on the qPCR machine. I then perform a melt curva after the PCR amplification is complete. 
+
+Since the  *naglu* A603fs mutation deletes 10 bp, the 2 PCR products arising from the mutant and wild type alleles will have a different melting temperature, and this can be observed in the melt curve. 
+
+## read in data
+```{r}
+# read in the data
+
+# melt cureve deriviities
+dfs <- 
+  read_delim("data/exp1.2/genotyping_data/KB_20230821_salbutamolExp1_2_nagluhomxhet7m_genotyping_meltregionderivativedata.txt", 
+             delim = "\t", # tab delimited
+             skip = 8) %>% 
+  pivot_longer(names_to = "Reading",
+               values_to = "dF",
+               starts_with("Reading")
+               ) %>%
+  dplyr::select(Position = `Well Location`, Reading, dF)
+
+# temperature readings
+temps <- 
+  read_delim("data/exp1.2/genotyping_data/KB_20230821_salbutamolExp1_2_nagluhomxhet7m_genotyping_meltregiontemperaturedata.txt",
+                    delim = "\t", 
+                    skip = 8
+                    ) %>%
+  pivot_longer(names_to = "Reading",
+               values_to = "Temperature",
+               starts_with("Reading")
+               ) %>%
+  dplyr::select(Position = `Well Location`, Reading, Temperature)
+
+# normalised fluorescence from SYBR green data
+
+fluordata <- 
+  read_delim("data/exp1.2/genotyping_data/KB_20230821_salbutamolExp1_2_nagluhomxhet7m_genotyping_meltregionnormalizeddata.txt",
+             delim = "\t", 
+             skip = 8
+  ) %>%
+  pivot_longer(names_to = "Reading",
+               values_to = "fluor.n",
+               starts_with("Reading")
+  ) %>%
+  dplyr::select(Position = `Well Location`, Reading, fluor.n)
+
+
+
+# results file
+data.results <- 
+  read_delim("data/exp1.2/genotyping_data/KB_20230821_salbutamolExp1_2_nagluhomxhet7m_genotyping_results.txt",
+             delim = "\t", 
+             skip = 8
+  ) %>%
+  dplyr::select(Position = Well, sample = `Sample Name`, Tm1, Tm2, Tm3) %>%
+  mutate(group = case_when(
+    Position == "A1" ~ "neg control",
+    Position == "A2" ~ "het positive control",
+    Position == "A3" ~ "hom positive control",
+    TRUE ~ "unknown"
+  ))
+
+
+
+
+# metadata of this fish and ckeanup
+meta <- read_excel("data/exp1.2/2023_Aug18_salbutamolexp1_2_meta.xlsx") %>%
+  mutate(fish_id = as.character(fish_id),
+         
+         treatment = factor(treatment,
+                            levels = c("untreated", "20 µM Salbutamol")),
+         
+         sex = as.factor(sex),
+         
+         behavBatch = as.factor(behavBatch),
+         
+         ymazeUnit = as.factor(ymazeUnit),
+         
+         ymazePosition = as.factor(ymazePosition)) %>%
+  
+  dplyr::select(fish_id, treatment, sex, Position = PositionForGeno, everything())
+
+
+
+# join these together
+data.meltcurve <-
+  dfs %>%
+  left_join(temps) %>% 
+  left_join(fluordata) 
+```
+
+# Plot out fluorescence data
+
+As the temp increases, the fluorescence decreaes. This is consistent with theee PCR products melting and the SYBR Green no longer fluorescing. 
+
+```{r}
+data.meltcurve %>%
+  left_join(data.results) %>%
+  ggplot(aes(x = Temperature, y = fluor.n), 
+         alpha = 0.75) +
+  geom_line(aes(group = Position,
+                colour = group)) +
+  scale_x_continuous(limits = c(78,86),
+                     breaks = seq(70,90)) +
+  scale_y_continuous(labels = comma)
+```
+
+# Plot out the first derivitive of the fluorescence data
+
+Two clear peaks are observed consistent with the wt and mutant alleles being present. 
+```{r}
+data.meltcurve %>%
+  left_join(data.results) %>%
+  ggplot(aes(x = Temperature, y = dF)) +
+  geom_line(aes(group = Position,
+                size = group,
+                alpha = group, 
+                colour = group)) +
+  scale_size_manual(values = c(2, 2, 2, 0.5)) + # make the controls fatter to stand out more
+  scale_alpha_manual(values = c(1, 1, 1, 0.5)) + # make the unknowns more transparent so the controls stand out more. 
+  scale_x_continuous(limits = c(78,86),
+                     breaks = seq(70,90)) +
+  scale_y_continuous(labels = comma, 
+                     limits = c(0, 300000))
+```
+
+# define the hets and homs
+
+```{r}
+data.results <- data.results %>%
+  mutate(wtallele = case_when(
+    Tm1 > 81.9 ~ TRUE,  #if the melt temp is higher than 83C, this is the wt band and so het
+    TRUE ~ FALSE
+  ),
+  mutallele = case_when(
+    Tm1 < 81.9  ~ TRUE,
+    TRUE ~ FALSE
+  ),
+  inferredGenotype = case_when(
+    Position == "A1" ~ "neg control",
+    Position == "A2" ~ "het positive control",
+    Position == "A3" ~ "hom positive control",
+     wtallele ==  TRUE & mutallele == FALSE ~ "het",
+    wtallele ==  TRUE & mutallele == TRUE ~ "het",
+    wtallele ==  FALSE & mutallele == TRUE ~ "hom"
+  )
+  )
+```
+
+# plot out the results by genotype
+
+```{r}
+
+# repeat the plot
+data.meltcurve %>%
+  left_join(data.results) %>%
+  ggplot(aes(x = Temperature, y = dF)) +
+  geom_line(aes(group = Position,
+                size = group,
+                alpha = group, 
+                colour = inferredGenotype)) +
+  scale_size_manual(values = c(2, 2, 2, 0.5)) + # make the controls fatter to stand out more
+  scale_alpha_manual(values = c(1, 1, 1, 0.5)) + # make the unknowns more transparent so the controls
+  scale_x_continuous(limits = c(78,86),
+                     breaks = seq(70,90)) +
+  scale_y_continuous(labels = comma, 
+                     limits = c(0, 300000))
+
+```
+
+# export the data 
+```{r}
+# export data for the final document
+meta %>%
+  left_join(data.results %>%
+              dplyr::select(Position, genotype = inferredGenotype)) %>%
+  dplyr::select(1,2,3, genotype, everything()) %>%
+  saveRDS("data/exp1.2/metadata_withGenotype.rds")
+
+data.meltcurve %>%
+  left_join(data.results) %>%
+  saveRDS("data/exp1.2/genotyping_data/meltcurveWithGenotypes.rds")
+
+```
+
+

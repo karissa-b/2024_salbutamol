@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Karissa Barthelson" />
+
+<meta name="date" content="2023-06-25" />
+
+<title>piulot14days</title>
+
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">2023_MPSIII_salbutamol</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">piulot14days</h1>
+<h4 class="author">Karissa Barthelson</h4>
+<h4 class="date">2023-06-25</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2023-08-24
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>2023_MPSIII_salbutamol/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230614code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20230614)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20230614code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20230614)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomkarissab2023MPSIIIsalbutamoltreee7fb2e6423ccadbfbe19f8c29365d74c233b3cfftargetblanke7fb2e6a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/karissa-b/2023_MPSIII_salbutamol/tree/e7fb2e6423ccadbfbe19f8c29365d74c233b3cff" target="_blank">e7fb2e6</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomkarissab2023MPSIIIsalbutamoltreee7fb2e6423ccadbfbe19f8c29365d74c233b3cfftargetblanke7fb2e6a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/karissa-b/2023_MPSIII_salbutamol/tree/e7fb2e6423ccadbfbe19f8c29365d74c233b3cff" target="_blank">e7fb2e6</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
+    Ignored:    code/.DS_Store
+    Ignored:    data/.DS_Store
+    Ignored:    data/exp1.2/.DS_Store
+    Ignored:    data/exp1.2/raw_data/.DS_Store
+    Ignored:    data/exp1.2/raw_data/distances/.DS_Store
+    Ignored:    data/exp1.2/raw_data/zones/.DS_Store
+    Ignored:    data/exp1.2/videos/
+    Ignored:    data/exp1/.DS_Store
+    Ignored:    data/exp1/processed_data/.DS_Store
+    Ignored:    data/exp1/raw_data/.DS_Store
+    Ignored:    data/exp1/videos/
+    Ignored:    data/pilot/.DS_Store
+    Ignored:    data/pilot/14 days/.DS_Store
+    Ignored:    data/pilot/14 days/raw_data/.DS_Store
+    Ignored:    data/pilot/7 days/.DS_Store
+    Ignored:    data/pilot/7 days/raw_data/.DS_Store
+    Ignored:    data/pilot/7 days/raw_data/distances/.DS_Store
+    Ignored:    data/pilot/7 days/tracking_videos/
+
+Untracked files:
+    Untracked:  analysis/fullexp1-2.rmd
+    Untracked:  code/experiment 1.2/
+    Untracked:  code/experiment 1/distances_exp1.2.R
+    Untracked:  code/plotMaking.R
+    Untracked:  data/R_objects/
+    Untracked:  data/exp1.2/processed_data/
+    Untracked:  data/exp1.2/~$2023_Aug18_salbutamolexp1_2_meta.xlsx
+    Untracked:  output/plots/
+
+Unstaged changes:
+    Modified:   .gitignore
+    Modified:   analysis/fullexp1.rmd
+    Modified:   analysis/piulot14days.rmd
+    Modified:   data/exp1.2/2023_Aug18_salbutamolexp1_2_meta.xlsx
+    Modified:   data/exp1.2/metadata_withGenotype.rds
+    Deleted:    data/exp1.2/raw_data/distances/ymaze_inLT-20230818T102151-data_totals.csv
+    Deleted:    data/exp1.2/raw_data/distances/ymazeinLT-20230818T095428-data_totals.csv
+    Deleted:    data/exp1.2/raw_data/distances/ymazeinLT-20230818T095643-data_totals.csv
+    Deleted:    data/exp1.2/raw_data/distances/ymazeinLT-20230818T164213-data_totals.csv
+    Deleted:    data/exp1.2/raw_data/distances/ymazeinLT-20230818T164447-data_totals.csv
+    Deleted:    data/exp1.2/raw_data/zones/ymaze8-20230818T095443.csv
+    Deleted:    data/exp1.2/raw_data/zones/ymaze_inLT-20230818T102150.csv
+    Deleted:    data/exp1.2/raw_data/zones/ymazeinLT-20230818T095427.csv
+    Deleted:    data/exp1.2/raw_data/zones/ymazeinLT-20230818T095643.csv
+    Deleted:    data/exp1.2/raw_data/zones/ymazeinLT-20230818T164213.csv
+    Deleted:    data/exp1.2/raw_data/zones/ymazeinLT-20230818T164446.csv
+    Modified:   output/R_objects/pilot/glmAlts7daysSalbutamol.rds
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/piulot14days.rmd</code>) and HTML (<code>docs/piulot14days.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/karissa-b/2023_MPSIII_salbutamol/blob/e7fb2e6423ccadbfbe19f8c29365d74c233b3cff/analysis/piulot14days.rmd" target="_blank">e7fb2e6</a>
+</td>
+<td>
+Karissa Barthelson
+</td>
+<td>
+2023-08-23
+</td>
+<td>
+addded salbutamol exp 1.2 data + genotyping analsysis
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>library(tidyverse)
+library(readxl)
+library(here)
+library(magrittr)
+library(scales)
+library(readxl)
+library(ggpubr)
+library(ggeasy)
+library(ggfortify)
+library(ggbeeswarm)
+library(ggforce)
+library(ggrepel)
+library(kableExtra)
+
+# stat analysis
+library(broom)
+library(lme4)
+library(performance)
+library(car)
+library(emmeans)
+library(glmmTMB)
+library(MASS)
+
+# set the default theme for ggplot as theme_bw
+theme_set(theme_classic())</code></pre>
+<pre class="r"><code>meta &lt;- read_excel(&quot;data/pilot/7 days/06062023 salbutamol pilot fish metadata.xlsx&quot;, 
+           sheet = &quot;14 days&quot;) %&gt;% 
+  
+  # tidy up colnames
+  mutate(fish_id = as.character(fish_id), 
+         treatment = factor(treatment, levels = c(&quot;untreated&quot;, 
+                                                  &quot;20 µM Salbutamol&quot;, 
+                                                  &quot;100 µM Salbutamol&quot;)),
+         sex = as.factor(sex), 
+         start_time = as.factor(`start time`), 
+         genotype = factor(genotype, levels = c(&quot;het&quot;, &quot;hom&quot;)),
+         geno_treat = paste0(genotype, &quot; &quot;, treatment) %&gt;% as.factor()
+         
+         )
+
+final_data &lt;- read_csv(&quot;data/pilot/14 days/processed_data/final_output.csv&quot;) %&gt;% 
+  dplyr::select(-1) %&gt;% 
+  mutate(fish_id = as.character(fish_id)) %&gt;% 
+  left_join(meta) %&gt;% 
+  dplyr::filter(genotype %in% c(&quot;het&quot;, &quot;hom&quot;))
+# make an object which converts the final data to long format. for easier plotting in ggplot
+final_data_long &lt;- final_data %&gt;%
+  gather(key = &quot;tetras&quot;, value = &quot;Count&quot;, # convert to long format
+         grep(&quot;[L|R]{4}&quot;, 
+              colnames(.))
+         )
+
+# also make an object which sums the tetragrams over the hour
+final_data_summedoverbins &lt;- final_data %&gt;%
+  gather(key = &quot;tetras&quot;, value = &quot;Count&quot;, # convert to long format
+         grep(&quot;[L|R]{4}&quot;, # select the columns which contain a L or a R four times
+              colnames(.))
+         ) %&gt;% 
+  group_by(fish_id, tetras) %&gt;% 
+  mutate(x = sum(Count)) %&gt;% # sum the tetragram counts per fish_id
+  dplyr::select(colnames(meta), tetras, x) %&gt;% 
+  unique
+
+distances_14days &lt;- read_rds(&quot;data/pilot/14 days/processed_data/distanceData14days.rds&quot;) </code></pre>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This pilot analysis will determine whether treatment with salbutamol (B2-adrenergiv receptor) can rescue changes to behaviour in a zebrafish model of MPS IIIB (naglu homs).</p>
+<p>The family of fish was consisted of 59 fish, het x hom so half het and half hom.</p>
+<p>the fam was treated with either nothing, 20 uM or 100 uM salbutamol</p>
+<p>7 days in the solution, changing the solution once 4 days in.</p>
+</div>
+<div id="number-fish-per-genotype-and-treatment" class="section level1">
+<h1>number fish per genotype and treatment</h1>
+<pre class="r"><code>meta %&gt;% 
+  ggplot(aes(x = treatment, fill = sex))+
+  geom_bar() +
+  facet_wrap(~genotype)</code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-2-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="assess-propoer-tracking" class="section level1">
+<h1>assess propoer tracking</h1>
+<p>First need to have a look at whether tracking worked nicely for these fish. To do this, I will import the</p>
+<pre class="r"><code># make a df which will contain bin numbers. 
+# 
+# 6 min bins
+bin_df &lt;- tibble(bins10 = c(rep(1, 360), 
+                  rep(2, 360), 
+                  rep(3, 360), 
+                  rep(4, 360), 
+                  rep(5, 360), 
+                  rep(6, 360), 
+                  rep(7, 360), 
+                  rep(8, 360), 
+                  rep(9, 360), 
+                  rep(10, 360)) %&gt;% as.factor(),
+                 # 10 min buins 
+       bins6 = c(rep(1, 600), 
+                 rep(2, 600), 
+                 rep(3, 600), 
+                 rep(4, 600), 
+                 rep(5, 600), 
+                 rep(6, 600)
+       ) %&gt;% as.factor(), 
+       BIN_NUM = distances_14days$BIN_NUM %&gt;% unique)
+       
+distances_14days %&gt;%
+  left_join(bin_df) %&gt;% 
+  group_by(fish_id, bins6) %&gt;% 
+  mutate(total_distance = sum(TOTAL_DISTANCE_IN_ZONE)) %&gt;% 
+  dplyr::distinct(bins6, .keep_all = T) %&gt;% 
+  dplyr::filter(genotype %in% c(&#39;het&#39;, &#39;hom&#39;)) %&gt;%
+  ggplot(aes(x = bins6, y = total_distance)) +
+  geom_hline(yintercept = 25000, colour = &quot;red&quot;) +
+  geom_jitter(alpha = 0.75) +
+  geom_boxplot(aes(x = bins6), 
+               fill = NA) +
+  geom_label(aes(label = fish_id), 
+             data = . %&gt;% 
+               dplyr::filter(total_distance &gt; 25000)) +
+  geom_line(aes(group = fish_id, colour = fish_id),
+            data = . %&gt;% 
+              dplyr::filter(total_distance &gt; 25000))</code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-3-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<p>A lot of fish look way more active. I went back and checked the tracking videos and the tracking did not seem to work very well. So I will omit these fish from the rest of the analysis.</p>
+<pre class="r"><code>fish2omit = distances_14days %&gt;%
+  left_join(bin_df) %&gt;% 
+  group_by(fish_id, bins6) %&gt;% 
+  mutate(total_distance = sum(TOTAL_DISTANCE_IN_ZONE)) %&gt;% 
+  dplyr::distinct(bins6, .keep_all = T) %&gt;% 
+  dplyr::filter(genotype %in% c(&#39;het&#39;, &#39;hom&#39;)) %&gt;%
+  dplyr::filter(total_distance &gt; 25000) %&gt;%  
+  .$fish_id %&gt;% 
+  unique()
+
+distances_14days %&lt;&gt;% 
+  dplyr::filter(!(fish_id %in% fish2omit))
+
+final_data %&lt;&gt;% 
+  dplyr::filter(!(fish_id %in% fish2omit))
+
+final_data_long %&lt;&gt;% 
+  dplyr::filter(!(fish_id %in% fish2omit))
+
+final_data_summedoverbins %&lt;&gt;% 
+  dplyr::filter(!(fish_id %in% fish2omit))</code></pre>
+</div>
+<div id="trial-effects" class="section level1">
+<h1>trial effects</h1>
+<pre class="r"><code>distances_14days %&gt;%
+  left_join(bin_df) %&gt;% 
+  group_by(fish_id, bins6) %&gt;% 
+  mutate(total_distance = sum(TOTAL_DISTANCE_IN_ZONE)) %&gt;% 
+  dplyr::distinct(bins6, .keep_all = T) %&gt;% 
+  dplyr::filter(genotype %in% c(&#39;het&#39;, &#39;hom&#39;)) %&gt;%
+  ggplot(aes(y = total_distance, 
+             x = behavBatch %&gt;% as.factor())) +
+  geom_hline(yintercept = 25000, colour = &quot;red&quot;) +
+  geom_jitter(alpha = 0.75) +
+  geom_boxplot(fill = NA) +
+  geom_label(aes(label = fish_id), 
+             data = . %&gt;% 
+               dplyr::filter(total_distance &gt; 24000)) +
+  facet_wrap(~bins6, scales = &quot;free_x&quot;)</code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-5-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="total-distance-travelled" class="section level1">
+<h1>total distance travelled</h1>
+<pre class="r"><code>fit.dists &lt;- distances_14days %&gt;%
+  left_join(bin_df) %&gt;% 
+  group_by(fish_id, bins6) %&gt;% 
+  mutate(total_distance = sum(TOTAL_DISTANCE_IN_ZONE)) %&gt;% 
+  dplyr::distinct(bins6, .keep_all = T) %&gt;% 
+  dplyr::filter(genotype %in% c(&#39;het&#39;, &#39;hom&#39;)) %&gt;% 
+  lmer(total_distance ~ (genotype*treatment*bins6*sex) + (1|`start time`) +(1|fish_id), 
+       data = .)
+
+# check assumptions
+# all look ok
+check_model(fit.dists)</code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-6-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>an &lt;- Anova(fit.dists)
+
+emmeans(fit.dists, list(pairwise ~ genotype * treatment * sex), adjust = &quot;tukey&quot;)</code></pre>
+<pre><code>$`emmeans of genotype, treatment, sex`
+ genotype treatment         sex emmean   SE   df lower.CL upper.CL
+ het      untreated         f     6267 3360 37.7     -537    13071
+ hom      untreated         f     9016 1474 34.8     6023    12010
+ het      20 µM Salbutamol  f    10549 1957 31.7     6562    14537
+ hom      20 µM Salbutamol  f    10219 1397 27.4     7355    13084
+ het      100 µM Salbutamol f     5850 1970 31.7     1836     9865
+ hom      100 µM Salbutamol f     6258 1325 35.4     3568     8947
+ het      untreated         m     9741 1283 25.6     7101    12381
+ hom      untreated         m     7524 1966 31.7     3517    11531
+ het      20 µM Salbutamol  m    14973 1895 37.7    11136    18810
+ hom      20 µM Salbutamol  m     8003 2325 37.7     3295    12711
+ het      100 µM Salbutamol m    11028 1180 24.2     8593    13463
+ hom      100 µM Salbutamol m     7910 1948 31.7     3941    11879
+
+Results are averaged over the levels of: bins6 
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+
+$`pairwise differences of genotype, treatment, sex`
+ 1                                                 estimate   SE   df t.ratio
+ het untreated f - hom untreated f                  -2749.2 3725 37.4  -0.738
+ het untreated f - het 20 µM Salbutamol f           -4282.1 3944 36.8  -1.086
+ het untreated f - hom 20 µM Salbutamol f           -3952.0 3676 36.9  -1.075
+ het untreated f - het 100 µM Salbutamol f            416.7 3949 36.8   0.106
+ het untreated f - hom 100 µM Salbutamol f              9.3 3605 38.0   0.003
+ het untreated f - het untreated m                  -3474.0 3464 36.1  -1.003
+ het untreated f - hom untreated m                  -1256.6 3941 36.8  -0.319
+ het untreated f - het 20 µM Salbutamol m           -8705.7 3912 37.7  -2.225
+ het untreated f - hom 20 µM Salbutamol m           -1735.8 4156 37.7  -0.418
+ het untreated f - het 100 µM Salbutamol m          -4761.0 3517 37.8  -1.354
+ het untreated f - hom 100 µM Salbutamol m          -1642.8 3819 37.8  -0.430
+ hom untreated f - het 20 µM Salbutamol f           -1533.0 2509 32.9  -0.611
+ hom untreated f - hom 20 µM Salbutamol f           -1202.8 1952 36.2  -0.616
+ hom untreated f - het 100 µM Salbutamol f           3165.9 2467 37.4   1.283
+ hom untreated f - hom 100 µM Salbutamol f           2758.5 2005 38.0   1.376
+ hom untreated f - het untreated m                   -724.8 1968 38.0  -0.368
+ hom untreated f - hom untreated m                   1492.5 2390 37.3   0.624
+ hom untreated f - het 20 µM Salbutamol m           -5956.5 2366 36.2  -2.518
+ hom untreated f - hom 20 µM Salbutamol m            1013.4 2755 38.0   0.368
+ hom untreated f - het 100 µM Salbutamol m          -2011.8 1954 32.8  -1.030
+ hom untreated f - hom 100 µM Salbutamol m           1106.4 2437 37.4   0.454
+ het 20 µM Salbutamol f - hom 20 µM Salbutamol f      330.1 2388 35.4   0.138
+ het 20 µM Salbutamol f - het 100 µM Salbutamol f    4698.9 2745 37.7   1.712
+ het 20 µM Salbutamol f - hom 100 µM Salbutamol f    4291.4 2363 38.0   1.816
+ het 20 µM Salbutamol f - het untreated m             808.2 2409 29.9   0.336
+ het 20 µM Salbutamol f - hom untreated m            3025.5 2843 31.7   1.064
+ het 20 µM Salbutamol f - het 20 µM Salbutamol m    -4423.5 2731 37.7  -1.620
+ het 20 µM Salbutamol f - hom 20 µM Salbutamol m     2546.3 3047 38.0   0.836
+ het 20 µM Salbutamol f - het 100 µM Salbutamol m    -478.9 2218 37.2  -0.216
+ het 20 µM Salbutamol f - hom 100 µM Salbutamol m    2639.3 2830 31.7   0.933
+ hom 20 µM Salbutamol f - het 100 µM Salbutamol f    4368.7 2465 33.0   1.772
+ hom 20 µM Salbutamol f - hom 100 µM Salbutamol f    3961.3 1988 33.7   1.993
+ hom 20 µM Salbutamol f - het untreated m             478.0 1910 35.8   0.250
+ hom 20 µM Salbutamol f - hom untreated m            2695.4 2399 37.1   1.123
+ hom 20 µM Salbutamol f - het 20 µM Salbutamol m    -4753.7 2298 36.5  -2.069
+ hom 20 µM Salbutamol f - hom 20 µM Salbutamol m     2216.2 2754 36.1   0.805
+ hom 20 µM Salbutamol f - het 100 µM Salbutamol m    -809.0 1865 29.7  -0.434
+ hom 20 µM Salbutamol f - hom 100 µM Salbutamol m    2309.2 2440 30.3   0.946
+ het 100 µM Salbutamol f - hom 100 µM Salbutamol f   -407.4 2292 36.5  -0.178
+ het 100 µM Salbutamol f - het untreated m          -3890.7 2375 34.7  -1.638
+ het 100 µM Salbutamol f - hom untreated m          -1673.4 2636 35.6  -0.635
+ het 100 µM Salbutamol f - het 20 µM Salbutamol m   -9122.4 2807 35.4  -3.250
+ het 100 µM Salbutamol f - hom 20 µM Salbutamol m   -2152.5 3106 36.0  -0.693
+ het 100 µM Salbutamol f - het 100 µM Salbutamol m  -5177.7 2336 34.1  -2.216
+ het 100 µM Salbutamol f - hom 100 µM Salbutamol m  -2059.5 2830 31.7  -0.728
+ hom 100 µM Salbutamol f - het untreated m          -3483.3 1850 37.9  -1.882
+ hom 100 µM Salbutamol f - hom untreated m          -1265.9 2316 37.8  -0.547
+ hom 100 µM Salbutamol f - het 20 µM Salbutamol m   -8715.0 2356 38.0  -3.700
+ hom 100 µM Salbutamol f - hom 20 µM Salbutamol m   -1745.1 2672 37.4  -0.653
+ hom 100 µM Salbutamol f - het 100 µM Salbutamol m  -4770.3 1769 37.4  -2.697
+ hom 100 µM Salbutamol f - hom 100 µM Salbutamol m  -1652.1 2351 38.0  -0.703
+ het untreated m - hom untreated m                   2217.3 2353 36.5   0.942
+ het untreated m - het 20 µM Salbutamol m           -5231.7 2299 37.9  -2.275
+ het untreated m - hom 20 µM Salbutamol m            1738.2 2722 36.1   0.638
+ het untreated m - het 100 µM Salbutamol m          -1287.0 1750 34.8  -0.736
+ het untreated m - hom 100 µM Salbutamol m           1831.2 2320 36.5   0.789
+ hom untreated m - het 20 µM Salbutamol m           -7449.0 2743 37.7  -2.716
+ hom untreated m - hom 20 µM Salbutamol m            -479.2 3084 36.0  -0.155
+ hom untreated m - het 100 µM Salbutamol m          -3504.4 2363 29.7  -1.483
+ hom untreated m - hom 100 µM Salbutamol m           -386.2 2824 31.7  -0.137
+ het 20 µM Salbutamol m - hom 20 µM Salbutamol m     6969.9 2963 37.5   2.352
+ het 20 µM Salbutamol m - het 100 µM Salbutamol m    3944.7 2226 38.0   1.772
+ het 20 µM Salbutamol m - hom 100 µM Salbutamol m    7062.9 2782 35.4   2.539
+ hom 20 µM Salbutamol m - het 100 µM Salbutamol m   -3025.2 2571 36.6  -1.177
+ hom 20 µM Salbutamol m - hom 100 µM Salbutamol m      93.0 2980 36.7   0.031
+ het 100 µM Salbutamol m - hom 100 µM Salbutamol m   3118.2 2281 37.2   1.367
+ p.value
+  0.9998
+  0.9935
+  0.9940
+  1.0000
+  1.0000
+  0.9967
+  1.0000
+  0.5429
+  1.0000
+  0.9655
+  1.0000
+  1.0000
+  1.0000
+  0.9764
+  0.9613
+  1.0000
+  1.0000
+  0.3615
+  1.0000
+  0.9957
+  1.0000
+  1.0000
+  0.8516
+  0.7995
+  1.0000
+  0.9943
+  0.8910
+  0.9994
+  1.0000
+  0.9981
+  0.8209
+  0.6948
+  1.0000
+  0.9915
+  0.6464
+  0.9995
+  1.0000
+  0.9978
+  1.0000
+  0.8827
+  1.0000
+  0.0882
+  0.9999
+  0.5500
+  0.9998
+  0.7622
+  1.0000
+  0.0287
+  0.9999
+  0.2668
+  0.9999
+  0.9981
+  0.5100
+  1.0000
+  0.9998
+  0.9996
+  0.2577
+  1.0000
+  0.9339
+  1.0000
+  0.4603
+  0.8226
+  0.3501
+  0.9877
+  1.0000
+  0.9628
+
+Results are averaged over the levels of: bins6 
+Degrees-of-freedom method: kenward-roger 
+P value adjustment: tukey method for comparing a family of 12 estimates </code></pre>
+<pre class="r"><code># geno treat sex
+print(emmeans(fit.dists, ~ genotype * treatment * sex), type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(aes(x = treatment, y = emmean, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin =  lower.CL, ymax = upper.CL),
+                position = position_dodge()) +
+  facet_wrap(~sex, nrow = 1)</code></pre>
+<pre><code> genotype treatment         sex emmean   SE   df lower.CL upper.CL
+ het      untreated         f     6267 3360 37.7     -537    13071
+ hom      untreated         f     9016 1474 34.8     6023    12010
+ het      20 µM Salbutamol  f    10549 1957 31.7     6562    14537
+ hom      20 µM Salbutamol  f    10219 1397 27.4     7355    13084
+ het      100 µM Salbutamol f     5850 1970 31.7     1836     9865
+ hom      100 µM Salbutamol f     6258 1325 35.4     3568     8947
+ het      untreated         m     9741 1283 25.6     7101    12381
+ hom      untreated         m     7524 1966 31.7     3517    11531
+ het      20 µM Salbutamol  m    14973 1895 37.7    11136    18810
+ hom      20 µM Salbutamol  m     8003 2325 37.7     3295    12711
+ het      100 µM Salbutamol m    11028 1180 24.2     8593    13463
+ hom      100 µM Salbutamol m     7910 1948 31.7     3941    11879
+
+Results are averaged over the levels of: bins6 
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-6-2.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># geno treat
+print(emmeans(fit.dists, ~ genotype * treatment), type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(aes(x = treatment, y = emmean/100, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin =  lower.CL/100, ymax = upper.CL/100),
+                position = position_dodge()) +
+  facet_wrap(~treatment, nrow = 1, scales = &quot;free_x&quot;) +
+  labs(title = &quot;14 days on salbutamol (with alarm)&quot;, 
+       y = &quot;Average distance travelled\nper 10 min bin (cm)&quot;) </code></pre>
+<pre><code> genotype treatment         emmean   SE   df lower.CL upper.CL
+ het      untreated           8004 1862 28.8     4195    11814
+ hom      untreated           8270 1262 20.6     5643    10897
+ het      20 µM Salbutamol   12761 1358 31.7     9993    15529
+ hom      20 µM Salbutamol    9111 1335 36.1     6404    11818
+ het      100 µM Salbutamol   8439 1128 25.0     6116    10763
+ hom      100 µM Salbutamol   7084 1180 24.6     4651     9517
+
+Results are averaged over the levels of: bins6, sex 
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-6-3.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># geno treat bin
+print(emmeans(fit.dists, ~ genotype * treatment * bins6 * sex), type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(aes(x = bins6, y = emmean, colour = genotype)) +
+  geom_col(aes(fill =genotype), 
+           alpha = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin =  lower.CL, ymax = upper.CL),
+                position = position_dodge()) +
+  facet_wrap(~sex+treatment, nrow = 1)</code></pre>
+<pre><code> genotype treatment         bins6 sex emmean   SE   df lower.CL upper.CL
+ het      untreated         1     f    10793 3904 71.4     3010    18576
+ hom      untreated         1     f    13616 1722 66.0    10178    17053
+ het      20 µM Salbutamol  1     f    14525 2269 60.4     9987    19062
+ hom      20 µM Salbutamol  1     f    15766 1616 52.4    12525    19008
+ het      100 µM Salbutamol 1     f    10572 2280 60.4     6013    15132
+ hom      100 µM Salbutamol 1     f     9815 1554 67.2     6713    12916
+ het      untreated         2     f    11090 3904 71.4     3307    18873
+ hom      untreated         2     f     8290 1722 66.0     4852    11727
+ het      20 µM Salbutamol  2     f    11987 2269 60.4     7450    16524
+ hom      20 µM Salbutamol  2     f    12189 1616 52.4     8948    15430
+ het      100 µM Salbutamol 2     f     7647 2280 60.4     3087    12207
+ hom      100 µM Salbutamol 2     f     6904 1554 67.2     3803    10006
+ het      untreated         3     f     4966 3904 71.4    -2817    12749
+ hom      untreated         3     f     8403 1722 66.0     4966    11840
+ het      20 µM Salbutamol  3     f    10626 2269 60.4     6089    15163
+ hom      20 µM Salbutamol  3     f    10259 1616 52.4     7018    13500
+ het      100 µM Salbutamol 3     f     5181 2280 60.4      621     9741
+ hom      100 µM Salbutamol 3     f     5862 1554 67.2     2760     8963
+ het      untreated         4     f     3417 3904 71.4    -4366    11200
+ hom      untreated         4     f     9151 1722 66.0     5714    12588
+ het      20 µM Salbutamol  4     f    11989 2269 60.4     7452    16527
+ hom      20 µM Salbutamol  4     f     7981 1616 52.4     4740    11222
+ het      100 µM Salbutamol 4     f     4420 2280 60.4     -140     8980
+ hom      100 µM Salbutamol 4     f     5052 1554 67.2     1950     8153
+ het      untreated         5     f     3902 3904 71.4    -3881    11685
+ hom      untreated         5     f     7794 1722 66.0     4357    11231
+ het      20 µM Salbutamol  5     f     8230 2269 60.4     3693    12768
+ hom      20 µM Salbutamol  5     f     7788 1616 52.4     4547    11030
+ het      100 µM Salbutamol 5     f     3551 2280 60.4    -1009     8111
+ hom      100 µM Salbutamol 5     f     4747 1554 67.2     1646     7849
+ het      untreated         6     f     3435 3904 71.4    -4348    11218
+ hom      untreated         6     f     6844 1722 66.0     3407    10281
+ het      20 µM Salbutamol  6     f     5938 2269 60.4     1401    10475
+ hom      20 µM Salbutamol  6     f     7331 1616 52.4     4090    10572
+ het      100 µM Salbutamol 6     f     3730 2280 60.4     -829     8290
+ hom      100 µM Salbutamol 6     f     5167 1554 67.2     2066     8269
+ het      untreated         1     m    15293 1487 48.9    12305    18281
+ hom      untreated         1     m    11519 2277 60.4     6965    16072
+ het      20 µM Salbutamol  1     m    17675 2215 71.4    13258    22091
+ hom      20 µM Salbutamol  1     m    13109 2717 71.4     7693    18525
+ het      100 µM Salbutamol 1     m    15970 1374 46.4    13206    18735
+ hom      100 µM Salbutamol 1     m    10649 2261 60.4     6128    15170
+ het      untreated         2     m    11818 1487 48.9     8830    14807
+ hom      untreated         2     m     7557 2277 60.4     3004    12111
+ het      20 µM Salbutamol  2     m    15972 2215 71.4    11555    20388
+ hom      20 µM Salbutamol  2     m     9810 2717 71.4     4393    15226
+ het      100 µM Salbutamol 2     m    13256 1374 46.4    10492    16021
+ hom      100 µM Salbutamol 2     m    11631 2261 60.4     7109    16152
+ het      untreated         3     m     9036 1487 48.9     6048    12024
+ hom      untreated         3     m     6298 2277 60.4     1745    10852
+ het      20 µM Salbutamol  3     m    14342 2215 71.4     9926    18759
+ hom      20 µM Salbutamol  3     m     8110 2717 71.4     2693    13526
+ het      100 µM Salbutamol 3     m    12608 1374 46.4     9843    15372
+ hom      100 µM Salbutamol 3     m     9154 2261 60.4     4633    13675
+ het      untreated         4     m     9307 1487 48.9     6319    12295
+ hom      untreated         4     m     6492 2277 60.4     1939    11046
+ het      20 µM Salbutamol  4     m    14380 2215 71.4     9963    18796
+ hom      20 µM Salbutamol  4     m     7012 2717 71.4     1596    12428
+ het      100 µM Salbutamol 4     m     9954 1374 46.4     7189    12719
+ hom      100 µM Salbutamol 4     m     6783 2261 60.4     2262    11304
+ het      untreated         5     m     6577 1487 48.9     3589     9565
+ hom      untreated         5     m     5739 2277 60.4     1185    10292
+ het      20 µM Salbutamol  5     m    15055 2215 71.4    10638    19471
+ hom      20 µM Salbutamol  5     m     7089 2717 71.4     1673    12505
+ het      100 µM Salbutamol 5     m     8046 1374 46.4     5281    10810
+ hom      100 µM Salbutamol 5     m     6015 2261 60.4     1494    10537
+ het      untreated         6     m     6415 1487 48.9     3427     9404
+ hom      untreated         6     m     7537 2277 60.4     2984    12091
+ het      20 µM Salbutamol  6     m    12414 2215 71.4     7998    16830
+ hom      20 µM Salbutamol  6     m     2888 2717 71.4    -2528     8305
+ het      100 µM Salbutamol 6     m     6335 1374 46.4     3570     9099
+ hom      100 µM Salbutamol 6     m     3227 2261 60.4    -1294     7748
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-6-4.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>print(emmeans(fit.dists, ~ genotype * treatment), type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(aes(x = treatment, y = emmean/100, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin =  lower.CL/100, ymax = upper.CL/100),
+                position = position_dodge()) +
+  facet_wrap(~treatment, nrow = 1, scales = &quot;free_x&quot;) +
+  labs(title = &quot;14 days on salbutamol (with alarm at 7 dys)&quot;, 
+       y = &quot;Average distance travelled\nper 10 min bin (cm)&quot;) </code></pre>
+<pre><code> genotype treatment         emmean   SE   df lower.CL upper.CL
+ het      untreated           8004 1862 28.8     4195    11814
+ hom      untreated           8270 1262 20.6     5643    10897
+ het      20 µM Salbutamol   12761 1358 31.7     9993    15529
+ hom      20 µM Salbutamol    9111 1335 36.1     6404    11818
+ het      100 µM Salbutamol   8439 1128 25.0     6116    10763
+ hom      100 µM Salbutamol   7084 1180 24.6     4651     9517
+
+Results are averaged over the levels of: bins6, sex 
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-6-5.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="time-spent-in-each-zone-of-the-y-maze" class="section level1">
+<h1>time spent in each zone of the Y-maze</h1>
+<p>I next will assess whether fish in each maze spend more or less time in each zone of the Y-maze (i.e. in each arm of the maze or the middle). This is also kind of representitve of locomotion, as they might spend longer in each arm of the maze if the swim speed was slower.</p>
+<p>In the plot below, the fish appear to spend less time in zone 4. This can be explained as zone 4 is the middle zone and the fish generally swim straight through it.</p>
+<pre class="r"><code>read_csv(&quot;data/pilot/14 days/processed_data/time_in_zone.csv&quot;) %&gt;%
+  mutate(fish_id = as.character(fish_id)) %&gt;%
+  dplyr::select(fish_id, bin, zone, time_in_zone) %&gt;% 
+  left_join(meta) %&gt;%
+  dplyr::filter(genotype %in% c(&quot;het&quot;, &quot;hom&quot;)) %&gt;% 
+  dplyr::filter(zone %in% c(1:4)) %&gt;% 
+  group_by(fish_id, zone) %&gt;%
+  mutate(total_timeInZone = sum(time_in_zone), 
+         zone = paste0(&quot;zone &quot;, zone)) %&gt;%
+  dplyr::distinct(fish_id, zone, .keep_all = TRUE) %&gt;%
+  ggplot(aes(x = treatment, y = total_timeInZone/60)) +
+  geom_quasirandom(aes(colour = genotype)
+                  ) +
+  geom_boxplot(aes(fill = genotype),
+               outlier.shape = NA,
+                alpha = 0.5) +
+  facet_wrap(~zone, nrow = 1) +
+  scale_y_log10() +
+  scale_fill_viridis_d(end = 0.75) +
+  scale_colour_viridis_d(end = 0.75) +
+  easy_rotate_x_labels(angle = -45) +
+  labs(y = &quot;Total time spent in each zone (mins, log scale)&quot;, 
+       title = &quot;Total time spent in each zone&quot;)</code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-7-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="check-for-handedness" class="section level1">
+<h1>check for handedness</h1>
+<p>Fontana et al. (<a href="https://doi.org/10.1007/s10071-019-01296-9" class="uri">https://doi.org/10.1007/s10071-019-01296-9</a>, Matt Parker’s group) showed that fish sometimes show a behavioural lateralisation (i.e. handedness). If fish show this, then they would perform less alternation tetragrams not due to working memory. The plot below circles each of the L_R bias groups.</p>
+<pre class="r"><code># make the LR bias object
+LR_Bias &lt;- final_data %&gt;%
+  dplyr::select(L, R, total_turns, fish_id) %&gt;%
+  group_by(fish_id) %&gt;%
+  mutate(L = sum(L),
+         R = sum(R),
+         total_turns = sum(total_turns),
+         L_R_bias = case_when( #consider more than 60% of the time performing a left or right turn to be a bias
+           L/total_turns &gt; 0.6 ~ &quot;Left&quot;,
+           R/total_turns &gt; 0.6 ~ &quot;Right&quot;,
+           TRUE ~ &quot;Neither&quot;
+         )) %&gt;%
+  dplyr::select(fish_id, L_R_bias) %&gt;%
+  unique() %&gt;%
+  mutate(L_R_bias = factor(L_R_bias,
+                           levels = c(&quot;Neither&quot;, &quot;Left&quot;, &quot;Right&quot;))
+  )</code></pre>
+<pre class="r"><code>ggarrange(
+final_data %&gt;%
+  left_join(LR_Bias) %&gt;%
+  group_by(fish_id) %&gt;%
+  mutate(L = sum(L),
+         R = sum(R),
+         total_turns = sum(total_turns)
+  ) %&gt;%
+  ggplot(aes(L, R)) +
+  geom_point(aes(shape = L_R_bias, colour = genotype),
+             size = 4) +
+  geom_mark_ellipse(aes(fill = L_R_bias, label = L_R_bias),
+                 alpha = 0.2, 
+                 con.cap = 0) +
+  labs(title = &quot;By Genotype&quot;) +
+  scale_color_viridis_d(end = 0.75) +
+  theme(legend.position = &quot;left&quot;, 
+        aspect.ratio = 1) +
+  scale_fill_viridis_d(option = &quot;plasma&quot;), 
+final_data %&gt;%
+  left_join(LR_Bias) %&gt;%
+  group_by(fish_id) %&gt;%
+  mutate(L = sum(L),
+         R = sum(R),
+         total_turns = sum(total_turns)
+  ) %&gt;%
+  ggplot(aes(L, R)) +
+  geom_point(aes(shape = L_R_bias, colour = treatment),
+             size = 4) +
+  geom_mark_ellipse(aes(fill = L_R_bias, label = L_R_bias),
+                 alpha = 0.2, 
+                  con.cap = 0)+
+  labs(title = &quot;By Treatment&quot;) +
+  scale_color_viridis_d(end = 0.75) +
+  scale_fill_viridis_d(option = &quot;plasma&quot;) +
+  theme(legend.position = &quot;right&quot;, 
+        aspect.ratio = 1)
+)</code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-9-1.png" width="100%" height="100%" style="display: block; margin: auto;" /> The overall propotions of fish showing left, right or no bias is simialr across the 4 experimental groups.</p>
+<pre class="r"><code>final_data %&gt;%
+  left_join(LR_Bias) %&gt;%
+  group_by(fish_id) %&gt;%
+  mutate(L = sum(L),
+         R = sum(R),
+         total_turns = sum(total_turns), 
+         genotreat = paste0(genotype, &quot;_&quot;, treatment)
+        
+  ) %&gt;% 
+  ggplot(aes(x = genotreat, fill = L_R_bias )) +
+  geom_bar()</code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-10-1.png" width="100%" height="100%" style="display: block; margin: auto;" /> # test for changes to alternation Cleal et al. showed that zebrafish naturally perform more of the alternation tetragrams (LRLR and RLRL) in a Y-maze. Here, we actually see more reps that alts. I will look at this more closely later.</p>
+<pre class="r"><code>final_data_summedoverbins %&gt;%
+  dplyr::distinct(x, .keep_all = T) %&gt;%
+  ggplot(aes(x = tetras, y = x)) +
+  geom_jitter(aes(colour = tetras,
+                  shape = sex)) +
+  geom_boxplot(outlier.shape = NA,
+               fill = NA
+               ) +
+  scale_fill_viridis_d() +
+  labs(y = &quot;Number of tetragrams&quot;,
+       colour = &quot;Tetragram&quot;,
+       x = &quot;Tetragram&quot;)+
+  theme(legend.position = &quot;bottom&quot;)  +
+  ggtitle(&quot;Total number of 16 possible tetragrams performed by zebrafish in a Y-maze\nduring a 1 hour search period&quot;) </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-11-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<p>We can also overlay the genotype boxplots as shown below. Looks like the heterozyous and homozygous fish perform more alternations than the WT fish. I will look into this more later in the analysis</p>
+<pre class="r"><code>final_data_summedoverbins %&gt;%
+  ggplot(aes(x = tetras, y = x)) +
+  geom_jitter(aes(colour = tetras,
+                  shape = sex)) +
+  geom_boxplot(outlier.shape = NA,
+               aes(fill = genotype),
+               alpha = 0.5,
+               ) +
+  scale_fill_viridis_d() +
+  labs(y = &quot;Number of tetragrams&quot;,
+       colour = &quot;Tetragram&quot;,
+       x = &quot;Tetragram&quot;)+
+  theme(legend.position = &quot;bottom&quot;)  +
+  facet_wrap(~treatment, ncol = 1) +
+  easy_rotate_x_labels(angle = -45) +
+  annotate(&quot;rect&quot;, # add some boxes aeround the alts 
+           xmin = 5.5, xmax = 6.5, 
+           ymin = -1, ymax = 200, 
+             alpha = 0, color= &quot;red&quot;) +
+  annotate(&quot;rect&quot;, 
+           xmin = 10.5, xmax = 11.5, 
+           ymin = -1, ymax = 200,
+           alpha = 0, color= &quot;red&quot;) +
+  ggtitle(&quot;Total number of 16 possible tetragrams performed by zebrafish in a Y-maze\nduring a 1 hour search period&quot;) </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-12-1.png" width="100%" height="100%" style="display: block; margin: auto;" /> The alternation tetragrams are the tetragram of interest (the measure of working memory). Below indicates the number of tetragrams performed by zerbafish across the 6 x 10 min blocks of the hour they spent in the maze.</p>
+<pre class="r"><code>final_data_long %&gt;%
+  dplyr::distinct(fish_id, bin, .keep_all = T) %&gt;%
+  mutate(binforvis = case_when(
+    bin == 1 ~ &quot;0-10 mins&quot;, 
+    bin == 2 ~ &quot;10-20 mins&quot;, 
+    bin == 3 ~ &quot;20-30 mins&quot;, 
+    bin == 4 ~ &quot;30-40 mins&quot;, 
+    bin == 5 ~ &quot;40-50 mins&quot;, 
+    bin == 6 ~ &quot;50-60 mins&quot;
+    )) %&gt;% 
+  ggplot(aes(x = treatment, y = alts)) +
+  geom_boxplot(outlier.shape = NA,
+               aes(fill = genotype), 
+               alpha = 0.5) +
+  geom_point(aes(colour = genotype), 
+             position = position_jitterdodge()) +
+  facet_wrap(~binforvis, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
+        legend.position = &quot;bottom&quot;) +
+  ylab(&quot;Frequency of alternation tetragrams (LRLR + RLRL)&quot;) +
+  scale_colour_viridis_d(end = 0.75) +
+  scale_fill_viridis_d(end = 0.75) </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-13-1.png" width="100%" height="100%" style="display: block; margin: auto;" /> We can also display this as the <em>relative</em> amount of alternation tetragrams performed by zebrafish in a 1 hour search period. This will control for how active each fish is. Again, fish 18 and 24 looks like outliers.</p>
+<pre class="r"><code>final_data_long %&gt;%
+  dplyr::distinct(fish_id, bin, .keep_all = T) %&gt;%
+  mutate(binforvis = case_when(
+    bin == 1 ~ &quot;0-10 mins&quot;, 
+    bin == 2 ~ &quot;10-20 mins&quot;, 
+    bin == 3 ~ &quot;20-30 mins&quot;, 
+    bin == 4 ~ &quot;30-40 mins&quot;, 
+    bin == 5 ~ &quot;40-50 mins&quot;, 
+    bin == 6 ~ &quot;50-60 mins&quot;
+    )) %&gt;% 
+  ggplot(aes(x = treatment, y = rel_alts)) +
+  geom_boxplot(outlier.shape = NA,
+               aes(fill = genotype), 
+               alpha = 0.5) +
+  geom_point(aes(colour = genotype), 
+             position = position_jitterdodge()) +
+  facet_wrap(~binforvis, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
+        legend.position = &quot;bottom&quot;) +
+  ylab(&quot;Relative number of alternation tetragrams\n(LRLR + RLRL) / total_turns&quot;) +
+  scale_colour_viridis_d(end = 0.75) +
+  scale_fill_viridis_d(end = 0.75) </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-14-1.png" width="100%" height="100%" style="display: block; margin: auto;" /> Finally, I will now test for alternation changes using a generalised linear mixed effect model (beta-binomial distribution). We use this because it is count data which is over-dispersed, and fixed and random effects are included. The link function is logit. No significant effects are observed on working memory. Only the <code>L_R_bias</code> term is significant, this is to be expected, as they would probably be performing more repitiions. The <code>bin:Genotype</code> effect is close (ish) to statistical significance. Meaning that this might have something there. but this does not take into account the Treatment group.<br />
+Note that I have ignored the effect of Sex here. We have never really seen a Sex effect in all of our ymaze analyses.</p>
+<pre class="r"><code>glm &lt;-
+  final_data %&gt;%
+  left_join(LR_Bias) %&gt;%
+  mutate(
+    non_alts = total_turns - alts,
+    bin = as.factor(bin)
+  ) %&gt;%
+  glmmTMB(
+    cbind(alts, non_alts) ~ (bin + genotype + treatment)^3 + L_R_bias + sex + (1|`start time`) + (1|fish_id),
+    family = betabinomial(),
+    data = .
+  )
+Anova(glm) %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::rename(pval = `Pr(&gt;Chisq)`) %&gt;%
+  kable() %&gt;%
+  kable_styling(full_width = FALSE) %&gt;% 
+  row_spec(row = 4, bold = TRUE)</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Chisq
+</th>
+<th style="text-align:right;">
+Df
+</th>
+<th style="text-align:right;">
+pval
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+bin
+</td>
+<td style="text-align:right;">
+3.536841
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0.6178206
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotype
+</td>
+<td style="text-align:right;">
+4.951462
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.0260686
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+treatment
+</td>
+<td style="text-align:right;">
+3.729494
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.1549354
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+L_R_bias
+</td>
+<td style="text-align:right;font-weight: bold;">
+21.268684
+</td>
+<td style="text-align:right;font-weight: bold;">
+2
+</td>
+<td style="text-align:right;font-weight: bold;">
+0.0000241
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sex
+</td>
+<td style="text-align:right;">
+3.156344
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.0756324
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bin:genotype
+</td>
+<td style="text-align:right;">
+7.433199
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0.1903640
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bin:treatment
+</td>
+<td style="text-align:right;">
+7.382678
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+0.6888909
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotype:treatment
+</td>
+<td style="text-align:right;">
+4.614963
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.0995115
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bin:genotype:treatment
+</td>
+<td style="text-align:right;">
+14.980949
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+0.1327579
+</td>
+</tr>
+</tbody>
+</table>
+<div id="vis" class="section level2">
+<h2>Vis</h2>
+<div id="genotype-x-treatment" class="section level3">
+<h3>genotype x treatment</h3>
+<p>The effect of genotype x treatment is not too far off statistical significance (p = 0.17) and is trending towards a rescue.</p>
+<pre class="r"><code>print(emmeans(glm, ~ genotype * treatment * sex), type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(aes(x = treatment, y = prob, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.5,
+           width = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL ),
+                width = 0.125,
+                size = 1,
+                position = position_dodge(width = 0.75)) +
+  facet_wrap(~sex ) +
+  theme(axis.text.x = element_text(hjust = 1,
+                               vjust = 1,
+                               angle = 45), 
+        legend.position = &quot;bottom&quot;) +
+  scale_color_viridis_d(end = 0.8, option = &quot;inferno&quot;) +
+  scale_fill_viridis_d(end = 0.8, option = &quot;inferno&quot;) +
+  labs(y = &quot;Estimated probability of alternation\n(LRLR + RLRL)&quot;,
+       x = &quot;genotype&quot;, 
+       title = &quot;GLM predicted probability of zebrafish performing an alternation\ntetragram due to Genotype and Treatment&quot;
+       )</code></pre>
+<pre><code> genotype treatment         sex   prob     SE  df asymp.LCL asymp.UCL
+ het      untreated         f   0.0983 0.0222 Inf    0.0625     0.151
+ hom      untreated         f   0.2199 0.0381 Inf    0.1542     0.304
+ het      20 µM Salbutamol  f   0.1148 0.0235 Inf    0.0761     0.170
+ hom      20 µM Salbutamol  f   0.1166 0.0238 Inf    0.0774     0.172
+ het      100 µM Salbutamol f   0.0947 0.0193 Inf    0.0630     0.140
+ hom      100 µM Salbutamol f   0.1091 0.0220 Inf    0.0729     0.160
+ het      untreated         m   0.1323 0.0219 Inf    0.0950     0.181
+ hom      untreated         m   0.2828 0.0504 Inf    0.1951     0.391
+ het      20 µM Salbutamol  m   0.1535 0.0309 Inf    0.1021     0.224
+ hom      20 µM Salbutamol  m   0.1559 0.0358 Inf    0.0978     0.239
+ het      100 µM Salbutamol m   0.1277 0.0213 Inf    0.0914     0.176
+ hom      100 µM Salbutamol m   0.1463 0.0338 Inf    0.0915     0.226
+
+Results are averaged over the levels of: bin, L_R_bias 
+Confidence level used: 0.95 
+Intervals are back-transformed from the logit scale </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-16-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># em &lt;- emmeans(glm, list(pairwise ~ genotype * treatment), &quot;response&quot;) 
+
+# em$`pairwise differences of genotype, treatment`</code></pre>
+</div>
+<div id="bin-x-genotype-x-treatment" class="section level3">
+<h3>bin x Genotype x Treatment</h3>
+<p>While this is not significant, the homs treated with iron appear to be performing more alternations more like their het saline siblings</p>
+<pre class="r"><code>print(emmeans(glm, ~ genotype * treatment * bin), type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  mutate(binforvis = case_when(
+    bin == 1 ~ &quot;0-10 mins&quot;, 
+    bin == 2 ~ &quot;10-20 mins&quot;, 
+    bin == 3 ~ &quot;20-30 mins&quot;, 
+    bin == 4 ~ &quot;30-40 mins&quot;, 
+    bin == 5 ~ &quot;40-50 mins&quot;, 
+    bin == 6 ~ &quot;50-60 mins&quot;
+    )) %&gt;% 
+  ggplot(aes(x = binforvis, y = prob, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.5,
+           # width = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL ),
+                # width = 0.125,
+                size = 1,
+                position = position_dodge()) +
+  facet_wrap(~treatment, nrow = 1) +
+  theme(axis.text.x = element_text(hjust = 1,
+                               vjust = 1,
+                               angle = 45), 
+        legend.position = &quot;bottom&quot;) +
+  scale_color_viridis_d(end = 0.8, option = &quot;inferno&quot;) +
+  scale_fill_viridis_d(end = 0.8, option = &quot;inferno&quot;) +
+  labs(y = &quot;Estimated probability of alternation\n(LRLR + RLRL)&quot;,
+       x = &quot;Time interval&quot;, 
+       title = &quot;GLM predicted probability of zebrafish performing an alternation\ntetragram due to Genotype and Treatment&quot;, 
+       subtitle = &quot;p = 0.25&quot;
+       )</code></pre>
+<pre><code> genotype treatment         bin   prob     SE  df asymp.LCL asymp.UCL
+ het      untreated         1   0.1451 0.0361 Inf    0.0876     0.231
+ hom      untreated         1   0.1918 0.0474 Inf    0.1153     0.302
+ het      20 µM Salbutamol  1   0.1126 0.0326 Inf    0.0628     0.194
+ hom      20 µM Salbutamol  1   0.1237 0.0392 Inf    0.0650     0.223
+ het      100 µM Salbutamol 1   0.1203 0.0273 Inf    0.0763     0.185
+ hom      100 µM Salbutamol 1   0.1338 0.0402 Inf    0.0726     0.234
+ het      untreated         2   0.1204 0.0315 Inf    0.0710     0.197
+ hom      untreated         2   0.2249 0.0610 Inf    0.1275     0.366
+ het      20 µM Salbutamol  2   0.1331 0.0360 Inf    0.0768     0.221
+ hom      20 µM Salbutamol  2   0.0910 0.0324 Inf    0.0444     0.177
+ het      100 µM Salbutamol 2   0.1059 0.0243 Inf    0.0669     0.164
+ hom      100 µM Salbutamol 2   0.1028 0.0343 Inf    0.0523     0.192
+ het      untreated         3   0.1179 0.0323 Inf    0.0678     0.197
+ hom      untreated         3   0.3023 0.0696 Inf    0.1849     0.453
+ het      20 µM Salbutamol  3   0.1081 0.0311 Inf    0.0605     0.186
+ hom      20 µM Salbutamol  3   0.1720 0.0487 Inf    0.0961     0.289
+ het      100 µM Salbutamol 3   0.1524 0.0323 Inf    0.0992     0.227
+ hom      100 µM Salbutamol 3   0.1244 0.0390 Inf    0.0658     0.223
+ het      untreated         4   0.0949 0.0277 Inf    0.0527     0.165
+ hom      untreated         4   0.2826 0.0646 Inf    0.1742     0.424
+ het      20 µM Salbutamol  4   0.1931 0.0466 Inf    0.1175     0.301
+ hom      20 µM Salbutamol  4   0.0801 0.0330 Inf    0.0349     0.173
+ het      100 µM Salbutamol 4   0.1057 0.0259 Inf    0.0646     0.168
+ hom      100 µM Salbutamol 4   0.1285 0.0414 Inf    0.0667     0.233
+ het      untreated         5   0.1071 0.0310 Inf    0.0597     0.185
+ hom      untreated         5   0.2710 0.0597 Inf    0.1705     0.402
+ het      20 µM Salbutamol  5   0.1639 0.0407 Inf    0.0987     0.260
+ hom      20 µM Salbutamol  5   0.2176 0.0557 Inf    0.1278     0.345
+ het      100 µM Salbutamol 5   0.1040 0.0263 Inf    0.0626     0.168
+ hom      100 µM Salbutamol 5   0.0930 0.0347 Inf    0.0437     0.187
+ het      untreated         6   0.1054 0.0305 Inf    0.0588     0.182
+ hom      untreated         6   0.2394 0.0544 Inf    0.1491     0.361
+ het      20 µM Salbutamol  6   0.1052 0.0313 Inf    0.0577     0.184
+ hom      20 µM Salbutamol  6   0.1691 0.0494 Inf    0.0927     0.288
+ het      100 µM Salbutamol 6   0.0824 0.0220 Inf    0.0484     0.137
+ hom      100 µM Salbutamol 6   0.1957 0.0526 Inf    0.1122     0.319
+
+Results are averaged over the levels of: L_R_bias, sex 
+Confidence level used: 0.95 
+Intervals are back-transformed from the logit scale </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-17-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="test-for-changes-to-repitition" class="section level1">
+<h1>test for changes to repitition</h1>
+<pre class="r"><code>final_data_long %&gt;%
+  dplyr::distinct(fish_id, bin, .keep_all = T) %&gt;%
+  mutate(binforvis = case_when(
+    bin == 1 ~ &quot;0-10 mins&quot;, 
+    bin == 2 ~ &quot;10-20 mins&quot;, 
+    bin == 3 ~ &quot;20-30 mins&quot;, 
+    bin == 4 ~ &quot;30-40 mins&quot;, 
+    bin == 5 ~ &quot;40-50 mins&quot;, 
+    bin == 6 ~ &quot;50-60 mins&quot;
+    )) %&gt;% 
+  ggplot(aes(x = treatment, y = rel_alts)) +
+  geom_boxplot(outlier.shape = NA,
+               aes(fill = genotype), 
+               alpha = 0.5) +
+  geom_point(aes(colour = genotype), 
+             position = position_jitterdodge()) +
+  facet_wrap(~binforvis, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
+        legend.position = &quot;bottom&quot;) +
+  ylab(&quot;Relative number of alternation tetragrams\n(LRLR + RLRL) / total_turns&quot;) +
+  scale_colour_viridis_d(end = 0.75) +
+  scale_fill_viridis_d(end = 0.75) </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-18-1.png" width="100%" height="100%" style="display: block; margin: auto;" /> Finally, I will now test for alternation changes using a generalised linear mixed effect model (beta-binomial distribution). We use this because it is count data which is over-dispersed, and fixed and random effects are included. The link function is logit. No significant effects are observed on working memory. Only the <code>L_R_bias</code> term is significant, this is to be expected, as they would probably be performing more repitiions. The <code>bin:Genotype</code> effect is close (ish) to statistical significance. Meaning that this might have something there. but this does not take into account the Treatment group.<br />
+Note that I have ignored the effect of Sex here. We have never really seen a Sex effect in all of our ymaze analyses.</p>
+<pre class="r"><code>glm.reps &lt;-
+  final_data %&gt;%
+  left_join(LR_Bias) %&gt;%
+  mutate(
+    non_reps = total_turns - reps,
+    bin = as.factor(bin)
+  ) %&gt;%
+  glmmTMB(
+    cbind(reps, non_reps) ~ (bin + genotype + treatment)^3 + L_R_bias + sex + (1|`start time`) + (1|fish_id),
+    family = betabinomial(),
+    data = .
+  )
+Anova(glm.reps) %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::rename(pval = `Pr(&gt;Chisq)`) %&gt;%
+  kable() %&gt;%
+  kable_styling(full_width = FALSE) %&gt;% 
+  row_spec(row = 4, bold = TRUE)</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Chisq
+</th>
+<th style="text-align:right;">
+Df
+</th>
+<th style="text-align:right;">
+pval
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+bin
+</td>
+<td style="text-align:right;">
+11.880393
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0.0364639
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotype
+</td>
+<td style="text-align:right;">
+2.729725
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.0984962
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+treatment
+</td>
+<td style="text-align:right;">
+1.086698
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.5807999
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+L_R_bias
+</td>
+<td style="text-align:right;font-weight: bold;">
+38.587144
+</td>
+<td style="text-align:right;font-weight: bold;">
+2
+</td>
+<td style="text-align:right;font-weight: bold;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sex
+</td>
+<td style="text-align:right;">
+2.765534
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.0963145
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bin:genotype
+</td>
+<td style="text-align:right;">
+8.321879
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0.1393658
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bin:treatment
+</td>
+<td style="text-align:right;">
+5.458442
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+0.8585289
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotype:treatment
+</td>
+<td style="text-align:right;">
+1.360565
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.5064738
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bin:genotype:treatment
+</td>
+<td style="text-align:right;">
+19.415254
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+0.0352945
+</td>
+</tr>
+</tbody>
+</table>
+<div id="vis-1" class="section level2">
+<h2>Vis</h2>
+<div id="genotype-x-treatment-1" class="section level3">
+<h3>genotype x treatment</h3>
+<p>The effect of genotype x treatment is not too far off statistical significance (p = 0.17) and is trending towards a rescue.</p>
+<pre class="r"><code>print(emmeans(glm.reps, ~ genotype * treatment * sex), type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(aes(x = treatment, y = prob, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.5,
+           width = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL ),
+                width = 0.125,
+                size = 1,
+                position = position_dodge(width = 0.75)) +
+  facet_wrap(~sex ) +
+  theme(axis.text.x = element_text(hjust = 1,
+                               vjust = 1,
+                               angle = 45), 
+        legend.position = &quot;bottom&quot;) +
+  scale_color_viridis_d(end = 0.8, option = &quot;inferno&quot;) +
+  scale_fill_viridis_d(end = 0.8, option = &quot;inferno&quot;) +
+  labs(y = &quot;Estimated probability of alternation\n(LRLR + RLRL)&quot;,
+       x = &quot;genotype&quot;, 
+       title = &quot;GLM predicted probability of zebrafish performing an alternation\ntetragram due to Genotype and Treatment&quot;
+       )</code></pre>
+<pre><code> genotype treatment         sex  prob     SE  df asymp.LCL asymp.UCL
+ het      untreated         f   0.294 0.0544 Inf    0.1992     0.410
+ hom      untreated         f   0.176 0.0363 Inf    0.1160     0.259
+ het      20 µM Salbutamol  f   0.283 0.0504 Inf    0.1949     0.391
+ hom      20 µM Salbutamol  f   0.243 0.0420 Inf    0.1705     0.334
+ het      100 µM Salbutamol f   0.296 0.0480 Inf    0.2110     0.397
+ hom      100 µM Salbutamol f   0.262 0.0438 Inf    0.1855     0.356
+ het      untreated         m   0.229 0.0343 Inf    0.1687     0.303
+ hom      untreated         m   0.133 0.0329 Inf    0.0803     0.211
+ het      20 µM Salbutamol  m   0.220 0.0436 Inf    0.1461     0.317
+ hom      20 µM Salbutamol  m   0.187 0.0420 Inf    0.1178     0.283
+ het      100 µM Salbutamol m   0.231 0.0357 Inf    0.1682     0.308
+ hom      100 µM Salbutamol m   0.202 0.0459 Inf    0.1270     0.307
+
+Results are averaged over the levels of: bin, L_R_bias 
+Confidence level used: 0.95 
+Intervals are back-transformed from the logit scale </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-20-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#m. &lt;- emmeans(glm, list(pairwise ~ genotype * treatment), response) 
+
+#em$`pairwise differences of genotype, treatment`</code></pre>
+</div>
+<div id="bin-x-genotype-x-treatment-1" class="section level3">
+<h3>bin x Genotype x Treatment</h3>
+<p>While this is not significant, the homs treated with iron appear to be performing more alternations more like their het saline siblings</p>
+<pre class="r"><code>print(emmeans(glm.reps, ~ genotype * treatment * bin), type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  mutate(binforvis = case_when(
+    bin == 1 ~ &quot;0-10 mins&quot;, 
+    bin == 2 ~ &quot;10-20 mins&quot;, 
+    bin == 3 ~ &quot;20-30 mins&quot;, 
+    bin == 4 ~ &quot;30-40 mins&quot;, 
+    bin == 5 ~ &quot;40-50 mins&quot;, 
+    bin == 6 ~ &quot;50-60 mins&quot;
+    )) %&gt;% 
+  ggplot(aes(x = binforvis, y = prob, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.5,
+           # width = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL ),
+                # width = 0.125,
+                size = 1,
+                position = position_dodge()) +
+  facet_wrap(~treatment, nrow = 1) +
+  theme(axis.text.x = element_text(hjust = 1,
+                               vjust = 1,
+                               angle = 45), 
+        legend.position = &quot;bottom&quot;) +
+  scale_color_viridis_d(end = 0.8, option = &quot;inferno&quot;) +
+  scale_fill_viridis_d(end = 0.8, option = &quot;inferno&quot;) +
+  labs(y = &quot;Estimated probability of alternation\n(LRLR + RLRL)&quot;,
+       x = &quot;Time interval&quot;, 
+       title = &quot;GLM predicted probability of zebrafish performing an alternation\ntetragram due to Genotype and Treatment&quot;, 
+       subtitle = &quot;p = 0.25&quot;
+       )</code></pre>
+<pre><code> genotype treatment         bin  prob     SE  df asymp.LCL asymp.UCL
+ het      untreated         1   0.161 0.0426 Inf    0.0936     0.262
+ hom      untreated         1   0.162 0.0456 Inf    0.0908     0.272
+ het      20 µM Salbutamol  1   0.249 0.0671 Inf    0.1406     0.401
+ hom      20 µM Salbutamol  1   0.163 0.0452 Inf    0.0926     0.272
+ het      100 µM Salbutamol 1   0.224 0.0500 Inf    0.1412     0.337
+ hom      100 µM Salbutamol 1   0.200 0.0578 Inf    0.1093     0.336
+ het      untreated         2   0.285 0.0596 Inf    0.1833     0.414
+ hom      untreated         2   0.160 0.0535 Inf    0.0803     0.293
+ het      20 µM Salbutamol  2   0.279 0.0664 Inf    0.1681     0.425
+ hom      20 µM Salbutamol  2   0.251 0.0594 Inf    0.1525     0.383
+ het      100 µM Salbutamol 2   0.403 0.0609 Inf    0.2914     0.526
+ hom      100 µM Salbutamol 2   0.226 0.0611 Inf    0.1285     0.367
+ het      untreated         3   0.194 0.0512 Inf    0.1125     0.314
+ hom      untreated         3   0.194 0.0607 Inf    0.1015     0.340
+ het      20 µM Salbutamol  3   0.274 0.0680 Inf    0.1621     0.425
+ hom      20 µM Salbutamol  3   0.193 0.0521 Inf    0.1107     0.316
+ het      100 µM Salbutamol 3   0.226 0.0510 Inf    0.1414     0.341
+ hom      100 µM Salbutamol 3   0.223 0.0594 Inf    0.1275     0.359
+ het      untreated         4   0.350 0.0662 Inf    0.2338     0.488
+ hom      untreated         4   0.148 0.0505 Inf    0.0736     0.276
+ het      20 µM Salbutamol  4   0.141 0.0473 Inf    0.0709     0.261
+ hom      20 µM Salbutamol  4   0.291 0.0661 Inf    0.1800     0.435
+ het      100 µM Salbutamol 4   0.202 0.0492 Inf    0.1226     0.316
+ hom      100 µM Salbutamol 4   0.291 0.0713 Inf    0.1721     0.446
+ het      untreated         5   0.340 0.0638 Inf    0.2280     0.474
+ hom      untreated         5   0.113 0.0400 Inf    0.0554     0.218
+ het      20 µM Salbutamol  5   0.261 0.0649 Inf    0.1541     0.405
+ hom      20 µM Salbutamol  5   0.207 0.0543 Inf    0.1200     0.333
+ het      100 µM Salbutamol 5   0.274 0.0569 Inf    0.1777     0.398
+ hom      100 µM Salbutamol 5   0.223 0.0624 Inf    0.1242     0.368
+ het      untreated         6   0.269 0.0587 Inf    0.1706     0.398
+ hom      untreated         6   0.151 0.0477 Inf    0.0788     0.269
+ het      20 µM Salbutamol  6   0.328 0.0701 Inf    0.2078     0.477
+ hom      20 µM Salbutamol  6   0.194 0.0533 Inf    0.1095     0.319
+ het      100 µM Salbutamol 6   0.268 0.0556 Inf    0.1737     0.390
+ hom      100 µM Salbutamol 6   0.230 0.0592 Inf    0.1341     0.365
+
+Results are averaged over the levels of: L_R_bias, sex 
+Confidence level used: 0.95 
+Intervals are back-transformed from the logit scale </code></pre>
+<p><img src="figure/piulot14days.rmd/unnamed-chunk-21-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>conclusion</h1>
+<p>Looks like 20 uM of salbutamol can affect zebrafish behaviour.</p>
+<p>I will repeat the experiment now with more fish per genotype.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.3 (2023-03-15)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Catalina 10.15.7
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] MASS_7.3-60        glmmTMB_1.1.7      emmeans_1.8.6      car_3.1-2         
+ [5] carData_3.0-5      performance_0.10.3 lme4_1.1-33        Matrix_1.5-4      
+ [9] broom_1.0.4        kableExtra_1.3.4   ggrepel_0.9.3      ggforce_0.4.1     
+[13] ggbeeswarm_0.7.2   ggfortify_0.4.16   ggeasy_0.1.4       ggpubr_0.6.0      
+[17] scales_1.2.1       magrittr_2.0.3     here_1.0.1         readxl_1.4.2      
+[21] lubridate_1.9.2    forcats_1.0.0      stringr_1.5.0      dplyr_1.1.2       
+[25] purrr_1.0.1        readr_2.1.4        tidyr_1.3.0        tibble_3.2.1      
+[29] ggplot2_3.4.2      tidyverse_2.0.0    workflowr_1.7.0   
+
+loaded via a namespace (and not attached):
+  [1] TH.data_1.1-2       minqa_1.2.5         colorspace_2.1-0   
+  [4] ggsignif_0.6.4      rprojroot_2.0.3     estimability_1.4.1 
+  [7] fs_1.6.2            rstudioapi_0.14     farver_2.1.1       
+ [10] bit64_4.0.5         fansi_1.0.4         mvtnorm_1.1-3      
+ [13] xml2_1.3.4          codetools_0.2-19    splines_4.2.3      
+ [16] cachem_1.0.8        knitr_1.42          polyclip_1.10-4    
+ [19] jsonlite_1.8.4      nloptr_2.0.3        pbkrtest_0.5.2     
+ [22] compiler_4.2.3      httr_1.4.6          backports_1.4.1    
+ [25] fastmap_1.1.1       cli_3.6.1           later_1.3.1        
+ [28] tweenr_2.0.2        htmltools_0.5.5     tools_4.2.3        
+ [31] coda_0.19-4         gtable_0.3.3        glue_1.6.2         
+ [34] Rcpp_1.0.10         cellranger_1.1.0    jquerylib_0.1.4    
+ [37] vctrs_0.6.2         svglite_2.1.1       nlme_3.1-162       
+ [40] insight_0.19.1      xfun_0.39           ps_1.7.5           
+ [43] rvest_1.0.3         timechange_0.2.0    lifecycle_1.0.3    
+ [46] rstatix_0.7.2       getPass_0.2-2       zoo_1.8-12         
+ [49] vroom_1.6.3         hms_1.1.3           promises_1.2.0.1   
+ [52] parallel_4.2.3      sandwich_3.0-2      TMB_1.9.4          
+ [55] yaml_2.3.7          see_0.7.5           gridExtra_2.3      
+ [58] sass_0.4.6          stringi_1.7.12      bayestestR_0.13.1  
+ [61] highr_0.10          boot_1.3-28.1       rlang_1.1.1        
+ [64] pkgconfig_2.0.3     systemfonts_1.0.4   evaluate_0.21      
+ [67] lattice_0.21-8      patchwork_1.1.2     labeling_0.4.2     
+ [70] cowplot_1.1.1       bit_4.0.5           processx_3.8.1     
+ [73] tidyselect_1.2.0    R6_2.5.1            generics_0.1.3     
+ [76] multcomp_1.4-23     mgcv_1.8-42         pillar_1.9.0       
+ [79] whisker_0.4.1       withr_2.5.0         datawizard_0.7.1   
+ [82] survival_3.5-5      abind_1.4-5         crayon_1.5.2       
+ [85] utf8_1.2.3          tzdb_0.3.0          rmarkdown_2.21     
+ [88] grid_4.2.3          callr_3.7.3         git2r_0.32.0       
+ [91] digest_0.6.31       webshot_0.5.4       xtable_1.8-4       
+ [94] numDeriv_2016.8-1.1 httpuv_1.6.10       munsell_0.5.0      
+ [97] beeswarm_0.4.0      viridisLite_0.4.2   vipor_0.4.5        
+[100] bslib_0.4.2        </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

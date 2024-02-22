@@ -1,0 +1,707 @@
+---
+title: "piulot14days"
+author: "Karissa Barthelson"
+date: "2023-06-25"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  autodep = TRUE,
+  echo = TRUE, 
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center", 
+  fig.retina = 1,
+  out.width ="100%", 
+  out.height = "100%"
+)
+```
+
+```{r packages}
+library(tidyverse)
+library(readxl)
+library(here)
+library(magrittr)
+library(scales)
+library(readxl)
+library(ggpubr)
+library(ggeasy)
+library(ggfortify)
+library(ggbeeswarm)
+library(ggforce)
+library(ggrepel)
+library(kableExtra)
+
+# stat analysis
+library(broom)
+library(lme4)
+library(performance)
+library(car)
+library(emmeans)
+library(glmmTMB)
+library(MASS)
+
+# set the default theme for ggplot as theme_bw
+theme_set(theme_classic())
+```
+
+```{r}
+meta <- read_excel("data/pilot/7 days/06062023 salbutamol pilot fish metadata.xlsx", 
+           sheet = "14 days") %>% 
+  
+  # tidy up colnames
+  mutate(fish_id = as.character(fish_id), 
+         treatment = factor(treatment, levels = c("untreated", 
+                                                  "20 µM Salbutamol", 
+                                                  "100 µM Salbutamol")),
+         sex = as.factor(sex), 
+         start_time = as.factor(`start time`), 
+         genotype = factor(genotype, levels = c("het", "hom")),
+         geno_treat = paste0(genotype, " ", treatment) %>% as.factor()
+         
+         )
+
+final_data <- read_csv("data/pilot/14 days/processed_data/final_output.csv") %>% 
+  dplyr::select(-1) %>% 
+  mutate(fish_id = as.character(fish_id)) %>% 
+  left_join(meta) %>% 
+  dplyr::filter(genotype %in% c("het", "hom"))
+# make an object which converts the final data to long format. for easier plotting in ggplot
+final_data_long <- final_data %>%
+  gather(key = "tetras", value = "Count", # convert to long format
+         grep("[L|R]{4}", 
+              colnames(.))
+         )
+
+# also make an object which sums the tetragrams over the hour
+final_data_summedoverbins <- final_data %>%
+  gather(key = "tetras", value = "Count", # convert to long format
+         grep("[L|R]{4}", # select the columns which contain a L or a R four times
+              colnames(.))
+         ) %>% 
+  group_by(fish_id, tetras) %>% 
+  mutate(x = sum(Count)) %>% # sum the tetragram counts per fish_id
+  dplyr::select(colnames(meta), tetras, x) %>% 
+  unique
+
+distances_14days <- read_rds("data/pilot/14 days/processed_data/distanceData14days.rds") 
+```
+
+# Introduction
+
+
+This pilot analysis will determine whether treatment with salbutamol (B2-adrenergiv receptor) can rescue changes to behaviour in a zebrafish model of MPS IIIB (naglu homs). 
+
+The family of fish was consisted of 59 fish, het x hom so half het and half hom. 
+
+the fam was treated with either nothing, 20 uM or 100 uM salbutamol
+ 
+7 days in the solution, changing the solution once 4 days in. 
+
+# number fish per genotype and treatment
+
+```{r}
+meta %>% 
+  ggplot(aes(x = treatment, fill = sex))+
+  geom_bar() +
+  facet_wrap(~genotype)
+```
+
+
+# assess propoer tracking
+
+First need to have a look at whether tracking worked nicely for these fish. To do this, I will import the
+
+```{r}
+# make a df which will contain bin numbers. 
+# 
+# 6 min bins
+bin_df <- tibble(bins10 = c(rep(1, 360), 
+                  rep(2, 360), 
+                  rep(3, 360), 
+                  rep(4, 360), 
+                  rep(5, 360), 
+                  rep(6, 360), 
+                  rep(7, 360), 
+                  rep(8, 360), 
+                  rep(9, 360), 
+                  rep(10, 360)) %>% as.factor(),
+                 # 10 min buins 
+       bins6 = c(rep(1, 600), 
+                 rep(2, 600), 
+                 rep(3, 600), 
+                 rep(4, 600), 
+                 rep(5, 600), 
+                 rep(6, 600)
+       ) %>% as.factor(), 
+       BIN_NUM = distances_14days$BIN_NUM %>% unique)
+       
+distances_14days %>%
+  left_join(bin_df) %>% 
+  group_by(fish_id, bins6) %>% 
+  mutate(total_distance = sum(TOTAL_DISTANCE_IN_ZONE)) %>% 
+  dplyr::distinct(bins6, .keep_all = T) %>% 
+  dplyr::filter(genotype %in% c('het', 'hom')) %>%
+  ggplot(aes(x = bins6, y = total_distance)) +
+  geom_hline(yintercept = 25000, colour = "red") +
+  geom_jitter(alpha = 0.75) +
+  geom_boxplot(aes(x = bins6), 
+               fill = NA) +
+  geom_label(aes(label = fish_id), 
+             data = . %>% 
+               dplyr::filter(total_distance > 25000)) +
+  geom_line(aes(group = fish_id, colour = fish_id),
+            data = . %>% 
+              dplyr::filter(total_distance > 25000))
+            
+  
+```
+
+A lot of fish look way more active. I went back and checked the tracking videos and the tracking did not seem to work very well. So I will omit these fish from the rest of the analysis. 
+
+```{r}
+fish2omit = distances_14days %>%
+  left_join(bin_df) %>% 
+  group_by(fish_id, bins6) %>% 
+  mutate(total_distance = sum(TOTAL_DISTANCE_IN_ZONE)) %>% 
+  dplyr::distinct(bins6, .keep_all = T) %>% 
+  dplyr::filter(genotype %in% c('het', 'hom')) %>%
+  dplyr::filter(total_distance > 25000) %>%  
+  .$fish_id %>% 
+  unique()
+
+distances_14days %<>% 
+  dplyr::filter(!(fish_id %in% fish2omit))
+
+final_data %<>% 
+  dplyr::filter(!(fish_id %in% fish2omit))
+
+final_data_long %<>% 
+  dplyr::filter(!(fish_id %in% fish2omit))
+
+final_data_summedoverbins %<>% 
+  dplyr::filter(!(fish_id %in% fish2omit))
+```
+
+# trial effects
+
+```{r}
+distances_14days %>%
+  left_join(bin_df) %>% 
+  group_by(fish_id, bins6) %>% 
+  mutate(total_distance = sum(TOTAL_DISTANCE_IN_ZONE)) %>% 
+  dplyr::distinct(bins6, .keep_all = T) %>% 
+  dplyr::filter(genotype %in% c('het', 'hom')) %>%
+  ggplot(aes(y = total_distance, 
+             x = behavBatch %>% as.factor())) +
+  geom_hline(yintercept = 25000, colour = "red") +
+  geom_jitter(alpha = 0.75) +
+  geom_boxplot(fill = NA) +
+  geom_label(aes(label = fish_id), 
+             data = . %>% 
+               dplyr::filter(total_distance > 24000)) +
+  facet_wrap(~bins6, scales = "free_x")
+
+  
+```
+
+# total distance travelled
+
+```{r}
+fit.dists <- distances_14days %>%
+  left_join(bin_df) %>% 
+  group_by(fish_id, bins6) %>% 
+  mutate(total_distance = sum(TOTAL_DISTANCE_IN_ZONE)) %>% 
+  dplyr::distinct(bins6, .keep_all = T) %>% 
+  dplyr::filter(genotype %in% c('het', 'hom')) %>% 
+  lmer(total_distance ~ (genotype*treatment*bins6*sex) + (1|`start time`) +(1|fish_id), 
+       data = .)
+
+# check assumptions
+# all look ok
+check_model(fit.dists)
+
+an <- Anova(fit.dists)
+
+emmeans(fit.dists, list(pairwise ~ genotype * treatment * sex), adjust = "tukey")
+
+# geno treat sex
+print(emmeans(fit.dists, ~ genotype * treatment * sex), type = "response") %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = treatment, y = emmean, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin =  lower.CL, ymax = upper.CL),
+                position = position_dodge()) +
+  facet_wrap(~sex, nrow = 1)
+
+# geno treat
+print(emmeans(fit.dists, ~ genotype * treatment), type = "response") %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = treatment, y = emmean/100, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin =  lower.CL/100, ymax = upper.CL/100),
+                position = position_dodge()) +
+  facet_wrap(~treatment, nrow = 1, scales = "free_x") +
+  labs(title = "14 days on salbutamol (with alarm)", 
+       y = "Average distance travelled\nper 10 min bin (cm)") 
+
+# geno treat bin
+print(emmeans(fit.dists, ~ genotype * treatment * bins6 * sex), type = "response") %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = bins6, y = emmean, colour = genotype)) +
+  geom_col(aes(fill =genotype), 
+           alpha = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin =  lower.CL, ymax = upper.CL),
+                position = position_dodge()) +
+  facet_wrap(~sex+treatment, nrow = 1)
+
+print(emmeans(fit.dists, ~ genotype * treatment), type = "response") %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = treatment, y = emmean/100, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin =  lower.CL/100, ymax = upper.CL/100),
+                position = position_dodge()) +
+  facet_wrap(~treatment, nrow = 1, scales = "free_x") +
+  labs(title = "14 days on salbutamol (with alarm at 7 dys)", 
+       y = "Average distance travelled\nper 10 min bin (cm)") 
+```
+
+
+# time spent in each zone of the Y-maze
+
+I next will assess whether fish in each maze spend more or less time in each zone of the Y-maze (i.e. in each arm of the maze or the middle). This is also kind of representitve of locomotion, as they might spend longer in each arm of the maze if the swim speed was slower. 
+
+In the plot below, the fish appear to spend less time in zone 4. This can be explained as zone 4 is the middle zone and the fish generally swim straight through it.  
+
+```{r}
+read_csv("data/pilot/14 days/processed_data/time_in_zone.csv") %>%
+  mutate(fish_id = as.character(fish_id)) %>%
+  dplyr::select(fish_id, bin, zone, time_in_zone) %>% 
+  left_join(meta) %>%
+  dplyr::filter(genotype %in% c("het", "hom")) %>% 
+  dplyr::filter(zone %in% c(1:4)) %>% 
+  group_by(fish_id, zone) %>%
+  mutate(total_timeInZone = sum(time_in_zone), 
+         zone = paste0("zone ", zone)) %>%
+  dplyr::distinct(fish_id, zone, .keep_all = TRUE) %>%
+  ggplot(aes(x = treatment, y = total_timeInZone/60)) +
+  geom_quasirandom(aes(colour = genotype)
+                  ) +
+  geom_boxplot(aes(fill = genotype),
+               outlier.shape = NA,
+                alpha = 0.5) +
+  facet_wrap(~zone, nrow = 1) +
+  scale_y_log10() +
+  scale_fill_viridis_d(end = 0.75) +
+  scale_colour_viridis_d(end = 0.75) +
+  easy_rotate_x_labels(angle = -45) +
+  labs(y = "Total time spent in each zone (mins, log scale)", 
+       title = "Total time spent in each zone")
+```
+
+
+# check for handedness
+
+Fontana et al. (https://doi.org/10.1007/s10071-019-01296-9, Matt Parker's group) showed that fish sometimes show a behavioural lateralisation (i.e. handedness). If fish show this, then they would perform less alternation tetragrams not due to working memory.
+The plot below circles each of the L_R bias groups. 
+```{r}
+# make the LR bias object
+LR_Bias <- final_data %>%
+  dplyr::select(L, R, total_turns, fish_id) %>%
+  group_by(fish_id) %>%
+  mutate(L = sum(L),
+         R = sum(R),
+         total_turns = sum(total_turns),
+         L_R_bias = case_when( #consider more than 60% of the time performing a left or right turn to be a bias
+           L/total_turns > 0.6 ~ "Left",
+           R/total_turns > 0.6 ~ "Right",
+           TRUE ~ "Neither"
+         )) %>%
+  dplyr::select(fish_id, L_R_bias) %>%
+  unique() %>%
+  mutate(L_R_bias = factor(L_R_bias,
+                           levels = c("Neither", "Left", "Right"))
+  )
+```
+
+```{r}
+ggarrange(
+final_data %>%
+  left_join(LR_Bias) %>%
+  group_by(fish_id) %>%
+  mutate(L = sum(L),
+         R = sum(R),
+         total_turns = sum(total_turns)
+  ) %>%
+  ggplot(aes(L, R)) +
+  geom_point(aes(shape = L_R_bias, colour = genotype),
+             size = 4) +
+  geom_mark_ellipse(aes(fill = L_R_bias, label = L_R_bias),
+                 alpha = 0.2, 
+                 con.cap = 0) +
+  labs(title = "By Genotype") +
+  scale_color_viridis_d(end = 0.75) +
+  theme(legend.position = "left", 
+        aspect.ratio = 1) +
+  scale_fill_viridis_d(option = "plasma"), 
+final_data %>%
+  left_join(LR_Bias) %>%
+  group_by(fish_id) %>%
+  mutate(L = sum(L),
+         R = sum(R),
+         total_turns = sum(total_turns)
+  ) %>%
+  ggplot(aes(L, R)) +
+  geom_point(aes(shape = L_R_bias, colour = treatment),
+             size = 4) +
+  geom_mark_ellipse(aes(fill = L_R_bias, label = L_R_bias),
+                 alpha = 0.2, 
+                  con.cap = 0)+
+  labs(title = "By Treatment") +
+  scale_color_viridis_d(end = 0.75) +
+  scale_fill_viridis_d(option = "plasma") +
+  theme(legend.position = "right", 
+        aspect.ratio = 1)
+)
+```
+The overall propotions of fish showing left, right or no bias is simialr across the 4 experimental groups. 
+```{r}
+final_data %>%
+  left_join(LR_Bias) %>%
+  group_by(fish_id) %>%
+  mutate(L = sum(L),
+         R = sum(R),
+         total_turns = sum(total_turns), 
+         genotreat = paste0(genotype, "_", treatment)
+        
+  ) %>% 
+  ggplot(aes(x = genotreat, fill = L_R_bias )) +
+  geom_bar()
+```
+# test for changes to alternation
+Cleal et al. showed that zebrafish naturally perform more of the alternation tetragrams (LRLR and RLRL) in a Y-maze. Here, we actually see more reps that alts. I will look at this more closely later. 
+```{r}
+final_data_summedoverbins %>%
+  dplyr::distinct(x, .keep_all = T) %>%
+  ggplot(aes(x = tetras, y = x)) +
+  geom_jitter(aes(colour = tetras,
+                  shape = sex)) +
+  geom_boxplot(outlier.shape = NA,
+               fill = NA
+               ) +
+  scale_fill_viridis_d() +
+  labs(y = "Number of tetragrams",
+       colour = "Tetragram",
+       x = "Tetragram")+
+  theme(legend.position = "bottom")  +
+  ggtitle("Total number of 16 possible tetragrams performed by zebrafish in a Y-maze\nduring a 1 hour search period") 
+```
+
+We can also overlay the genotype boxplots as shown below. Looks like the heterozyous and homozygous fish perform more alternations than the WT fish. I will look into this more later in the analysis
+```{r}
+final_data_summedoverbins %>%
+  ggplot(aes(x = tetras, y = x)) +
+  geom_jitter(aes(colour = tetras,
+                  shape = sex)) +
+  geom_boxplot(outlier.shape = NA,
+               aes(fill = genotype),
+               alpha = 0.5,
+               ) +
+  scale_fill_viridis_d() +
+  labs(y = "Number of tetragrams",
+       colour = "Tetragram",
+       x = "Tetragram")+
+  theme(legend.position = "bottom")  +
+  facet_wrap(~treatment, ncol = 1) +
+  easy_rotate_x_labels(angle = -45) +
+  annotate("rect", # add some boxes aeround the alts 
+           xmin = 5.5, xmax = 6.5, 
+           ymin = -1, ymax = 200, 
+             alpha = 0, color= "red") +
+  annotate("rect", 
+           xmin = 10.5, xmax = 11.5, 
+           ymin = -1, ymax = 200,
+           alpha = 0, color= "red") +
+  ggtitle("Total number of 16 possible tetragrams performed by zebrafish in a Y-maze\nduring a 1 hour search period") 
+```
+The alternation tetragrams are the tetragram of interest (the measure of working memory). Below indicates the number of tetragrams performed by zerbafish across the 6 x 10 min blocks of the hour they spent in the maze.
+```{r}
+final_data_long %>%
+  dplyr::distinct(fish_id, bin, .keep_all = T) %>%
+  mutate(binforvis = case_when(
+    bin == 1 ~ "0-10 mins", 
+    bin == 2 ~ "10-20 mins", 
+    bin == 3 ~ "20-30 mins", 
+    bin == 4 ~ "30-40 mins", 
+    bin == 5 ~ "40-50 mins", 
+    bin == 6 ~ "50-60 mins"
+    )) %>% 
+  ggplot(aes(x = treatment, y = alts)) +
+  geom_boxplot(outlier.shape = NA,
+               aes(fill = genotype), 
+               alpha = 0.5) +
+  geom_point(aes(colour = genotype), 
+             position = position_jitterdodge()) +
+  facet_wrap(~binforvis, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
+        legend.position = "bottom") +
+  ylab("Frequency of alternation tetragrams (LRLR + RLRL)") +
+  scale_colour_viridis_d(end = 0.75) +
+  scale_fill_viridis_d(end = 0.75) 
+  
+```
+We can also display this as the *relative* amount of alternation tetragrams performed by zebrafish in a 1 hour search period. This will control for how active each fish is. Again, fish 18 and 24 looks like outliers.
+```{r}
+final_data_long %>%
+  dplyr::distinct(fish_id, bin, .keep_all = T) %>%
+  mutate(binforvis = case_when(
+    bin == 1 ~ "0-10 mins", 
+    bin == 2 ~ "10-20 mins", 
+    bin == 3 ~ "20-30 mins", 
+    bin == 4 ~ "30-40 mins", 
+    bin == 5 ~ "40-50 mins", 
+    bin == 6 ~ "50-60 mins"
+    )) %>% 
+  ggplot(aes(x = treatment, y = rel_alts)) +
+  geom_boxplot(outlier.shape = NA,
+               aes(fill = genotype), 
+               alpha = 0.5) +
+  geom_point(aes(colour = genotype), 
+             position = position_jitterdodge()) +
+  facet_wrap(~binforvis, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
+        legend.position = "bottom") +
+  ylab("Relative number of alternation tetragrams\n(LRLR + RLRL) / total_turns") +
+  scale_colour_viridis_d(end = 0.75) +
+  scale_fill_viridis_d(end = 0.75) 
+```
+Finally, I will now test for alternation changes using a generalised linear mixed effect model (beta-binomial distribution). We use this because it is count data which is over-dispersed, and fixed and random effects are included. The link function is logit.
+No significant effects are observed on working memory. Only the `L_R_bias` term is significant, this is to be expected, as they would probably be performing more repitiions. 
+The `bin:Genotype` effect is close (ish) to statistical significance. Meaning that this might have something there. but this does not take into account the Treatment group.   
+Note that I have ignored the effect of Sex here. We have never really seen a Sex effect in all of our ymaze analyses.
+```{r}
+glm <-
+  final_data %>%
+  left_join(LR_Bias) %>%
+  mutate(
+    non_alts = total_turns - alts,
+    bin = as.factor(bin)
+  ) %>%
+  glmmTMB(
+    cbind(alts, non_alts) ~ (bin + genotype + treatment)^3 + L_R_bias + sex + (1|`start time`) + (1|fish_id),
+    family = betabinomial(),
+    data = .
+  )
+Anova(glm) %>%
+  as.data.frame() %>%
+  dplyr::rename(pval = `Pr(>Chisq)`) %>%
+  kable() %>%
+  kable_styling(full_width = FALSE) %>% 
+  row_spec(row = 4, bold = TRUE)
+```
+
+## Vis 
+### genotype x treatment
+The effect of genotype x treatment is not too far off statistical significance (p = 0.17) and is trending towards a rescue. 
+
+```{r}
+print(emmeans(glm, ~ genotype * treatment * sex), type = "response") %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = treatment, y = prob, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.5,
+           width = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL ),
+                width = 0.125,
+                size = 1,
+                position = position_dodge(width = 0.75)) +
+  facet_wrap(~sex ) +
+  theme(axis.text.x = element_text(hjust = 1,
+                               vjust = 1,
+                               angle = 45), 
+        legend.position = "bottom") +
+  scale_color_viridis_d(end = 0.8, option = "inferno") +
+  scale_fill_viridis_d(end = 0.8, option = "inferno") +
+  labs(y = "Estimated probability of alternation\n(LRLR + RLRL)",
+       x = "genotype", 
+       title = "GLM predicted probability of zebrafish performing an alternation\ntetragram due to Genotype and Treatment"
+       )
+
+# em <- emmeans(glm, list(pairwise ~ genotype * treatment), "response") 
+
+# em$`pairwise differences of genotype, treatment`
+
+```
+### bin x Genotype x Treatment
+While this is not significant, the homs treated with iron appear to be performing more alternations more like their het saline siblings
+```{r}
+print(emmeans(glm, ~ genotype * treatment * bin), type = "response") %>% 
+  as_tibble() %>% 
+  mutate(binforvis = case_when(
+    bin == 1 ~ "0-10 mins", 
+    bin == 2 ~ "10-20 mins", 
+    bin == 3 ~ "20-30 mins", 
+    bin == 4 ~ "30-40 mins", 
+    bin == 5 ~ "40-50 mins", 
+    bin == 6 ~ "50-60 mins"
+    )) %>% 
+  ggplot(aes(x = binforvis, y = prob, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.5,
+           # width = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL ),
+                # width = 0.125,
+                size = 1,
+                position = position_dodge()) +
+  facet_wrap(~treatment, nrow = 1) +
+  theme(axis.text.x = element_text(hjust = 1,
+                               vjust = 1,
+                               angle = 45), 
+        legend.position = "bottom") +
+  scale_color_viridis_d(end = 0.8, option = "inferno") +
+  scale_fill_viridis_d(end = 0.8, option = "inferno") +
+  labs(y = "Estimated probability of alternation\n(LRLR + RLRL)",
+       x = "Time interval", 
+       title = "GLM predicted probability of zebrafish performing an alternation\ntetragram due to Genotype and Treatment", 
+       subtitle = "p = 0.25"
+       )
+```
+
+# test for changes to repitition
+
+
+```{r}
+final_data_long %>%
+  dplyr::distinct(fish_id, bin, .keep_all = T) %>%
+  mutate(binforvis = case_when(
+    bin == 1 ~ "0-10 mins", 
+    bin == 2 ~ "10-20 mins", 
+    bin == 3 ~ "20-30 mins", 
+    bin == 4 ~ "30-40 mins", 
+    bin == 5 ~ "40-50 mins", 
+    bin == 6 ~ "50-60 mins"
+    )) %>% 
+  ggplot(aes(x = treatment, y = rel_alts)) +
+  geom_boxplot(outlier.shape = NA,
+               aes(fill = genotype), 
+               alpha = 0.5) +
+  geom_point(aes(colour = genotype), 
+             position = position_jitterdodge()) +
+  facet_wrap(~binforvis, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
+        legend.position = "bottom") +
+  ylab("Relative number of alternation tetragrams\n(LRLR + RLRL) / total_turns") +
+  scale_colour_viridis_d(end = 0.75) +
+  scale_fill_viridis_d(end = 0.75) 
+```
+Finally, I will now test for alternation changes using a generalised linear mixed effect model (beta-binomial distribution). We use this because it is count data which is over-dispersed, and fixed and random effects are included. The link function is logit.
+No significant effects are observed on working memory. Only the `L_R_bias` term is significant, this is to be expected, as they would probably be performing more repitiions. 
+The `bin:Genotype` effect is close (ish) to statistical significance. Meaning that this might have something there. but this does not take into account the Treatment group.   
+Note that I have ignored the effect of Sex here. We have never really seen a Sex effect in all of our ymaze analyses.
+```{r}
+glm.reps <-
+  final_data %>%
+  left_join(LR_Bias) %>%
+  mutate(
+    non_reps = total_turns - reps,
+    bin = as.factor(bin)
+  ) %>%
+  glmmTMB(
+    cbind(reps, non_reps) ~ (bin + genotype + treatment)^3 + L_R_bias + sex + (1|`start time`) + (1|fish_id),
+    family = betabinomial(),
+    data = .
+  )
+Anova(glm.reps) %>%
+  as.data.frame() %>%
+  dplyr::rename(pval = `Pr(>Chisq)`) %>%
+  kable() %>%
+  kable_styling(full_width = FALSE) %>% 
+  row_spec(row = 4, bold = TRUE)
+```
+
+## Vis 
+### genotype x treatment
+The effect of genotype x treatment is not too far off statistical significance (p = 0.17) and is trending towards a rescue. 
+
+```{r}
+print(emmeans(glm.reps, ~ genotype * treatment * sex), type = "response") %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = treatment, y = prob, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.5,
+           width = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL ),
+                width = 0.125,
+                size = 1,
+                position = position_dodge(width = 0.75)) +
+  facet_wrap(~sex ) +
+  theme(axis.text.x = element_text(hjust = 1,
+                               vjust = 1,
+                               angle = 45), 
+        legend.position = "bottom") +
+  scale_color_viridis_d(end = 0.8, option = "inferno") +
+  scale_fill_viridis_d(end = 0.8, option = "inferno") +
+  labs(y = "Estimated probability of alternation\n(LRLR + RLRL)",
+       x = "genotype", 
+       title = "GLM predicted probability of zebrafish performing an alternation\ntetragram due to Genotype and Treatment"
+       )
+
+#m. <- emmeans(glm, list(pairwise ~ genotype * treatment), response) 
+
+#em$`pairwise differences of genotype, treatment`
+
+```
+### bin x Genotype x Treatment
+While this is not significant, the homs treated with iron appear to be performing more alternations more like their het saline siblings
+```{r}
+print(emmeans(glm.reps, ~ genotype * treatment * bin), type = "response") %>% 
+  as_tibble() %>% 
+  mutate(binforvis = case_when(
+    bin == 1 ~ "0-10 mins", 
+    bin == 2 ~ "10-20 mins", 
+    bin == 3 ~ "20-30 mins", 
+    bin == 4 ~ "30-40 mins", 
+    bin == 5 ~ "40-50 mins", 
+    bin == 6 ~ "50-60 mins"
+    )) %>% 
+  ggplot(aes(x = binforvis, y = prob, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.5,
+           # width = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL ),
+                # width = 0.125,
+                size = 1,
+                position = position_dodge()) +
+  facet_wrap(~treatment, nrow = 1) +
+  theme(axis.text.x = element_text(hjust = 1,
+                               vjust = 1,
+                               angle = 45), 
+        legend.position = "bottom") +
+  scale_color_viridis_d(end = 0.8, option = "inferno") +
+  scale_fill_viridis_d(end = 0.8, option = "inferno") +
+  labs(y = "Estimated probability of alternation\n(LRLR + RLRL)",
+       x = "Time interval", 
+       title = "GLM predicted probability of zebrafish performing an alternation\ntetragram due to Genotype and Treatment", 
+       subtitle = "p = 0.25"
+       )
+```
+
+# conclusion
+
+Looks like 20 uM of salbutamol can affect zebrafish behaviour. 
+
+I will repeat the experiment now with more fish per genotype. 

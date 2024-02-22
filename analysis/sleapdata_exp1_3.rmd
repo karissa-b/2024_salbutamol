@@ -1,0 +1,229 @@
+---
+title: "sleapdata_exp1_3"
+author: ""
+date: "2024-02-22"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  autodep = TRUE,
+  echo = TRUE, 
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center", 
+  fig.retina = 1,
+  out.width ="100%", 
+  out.height = "100%"
+)
+```
+
+```{r packages}
+library(tidyverse)
+library(readxl)
+library(here)
+library(magrittr)
+library(scales)
+library(readxl)
+library(ggpubr)
+library(ggeasy)
+library(ggfortify)
+library(ggbeeswarm)
+library(ggforce)
+library(ggrepel)
+library(gganimate)
+library(kableExtra)
+library(pander)
+
+# stat analysis
+library(broom)
+library(lme4)
+library(performance)
+library(car)
+library(emmeans)
+library(glmmTMB)
+library(MASS)
+
+# set the default theme for ggplot as theme_bw
+theme_set(theme_classic())
+```
+
+# intro
+
+I have used sleap to predict the location of the head and tail base of each fish (x and y coordinates). Here, I will analyse these data to calculate:
+
+-   distance traveled
+
+-   time moving
+
+-   active velocity
+
+-   time in each zones
+
+all files are read in, but I will just analyse one file from one fish for now.
+
+```{r}
+sleap_files <- list.files("data/exp1.3/sleap_data", 
+           full.names = TRUE)
+
+data <- read_csv(sleap_files[2]) %>% 
+  dplyr:::select(-track)
+
+head(data) %>% 
+  pander
+
+```
+
+Note that this video was originally recorded at 30 fps, but then written at 1 fpf (i.e. skipping 29 frames.) So the `frame_idx` column means seconds. Note this may not be true for other videos read in at 30 fps
+
+## plot some data
+
+## head only
+
+```{r}
+data %>% 
+  dplyr::filter(frame_idx < 40) %>% 
+  ggplot(aes(
+    x = head.x, y = head.y, 
+    colour = frame_idx 
+  )) + 
+  geom_point(
+    size = 4
+  ) + 
+  transition_states(
+    frame_idx, 
+    transition_length = 2,
+    state_length = 1) +
+  shadow_trail(
+    alpha = 0.3,
+    max_frames = 10) +
+  scale_x_continuous(limits = c(0, 200)) +
+  scale_y_continuous(limits = c(0, 200)) +
+  scale_color_viridis_c()
+```
+
+## head and body
+
+```{r}
+data %>% 
+  dplyr::filter(frame_idx < 100) %>% 
+  ggplot() + 
+   geom_segment(
+     aes(xend = head.x, 
+         yend = head.y, 
+         x = tailbase.x, 
+         y = tailbase.y, 
+         colour = frame_idx), 
+     arrow = arrow(length = unit(0.1,"cm")),
+     size = 1
+     ) +
+  transition_states(
+    frame_idx, 
+    transition_length = 2,
+    state_length = 1) +
+  shadow_trail(
+    alpha = 0.3,
+    max_frames = 10) +
+  scale_x_continuous(limits = c(0, 200)) +
+  scale_y_continuous(limits = c(0, 200)) +
+  scale_color_viridis_c() +
+  labs(
+    x = "x", 
+    y = "y"
+  )
+```
+
+## defining zones
+
+I need to define the zones of the Y maze.
+
+```{r}
+data %<>% 
+  mutate(zone = case_when(
+    head.y > 85 & between(head.x, left = 85, right = 125)  ~ "1", 
+    head.x > 120 & between(head.y, left = 10, right = 80)  ~ "2", 
+    head.x < 90 & between(head.y, left = 10, right = 85)  ~ "3", 
+    TRUE ~ "4"
+           ))
+  
+data %>% 
+ggplot(aes(
+    x = head.x, y = head.y, 
+    colour = zone 
+  )) + 
+  geom_point(
+    size = 4, 
+    alpha = 0.5
+  ) +
+  theme_linedraw() +
+  scale_x_continuous(
+    limits = c(0,200), 
+    breaks = seq(0, 200, by = 10)
+  ) + 
+    scale_y_continuous(
+    limits = c(0,200), 
+    breaks = seq(0, 200, by = 10)
+  ) +
+  theme(
+    aspect.ratio = 1
+  ) +
+  scale_color_viridis_d()
+
+```
+
+# Assessing the score
+
+```{r}
+data %>% 
+  ggplot(aes(x = frame_idx, y = instance.score)) + 
+  geom_point()
+```
+
+# Calculating distance traveled. 
+
+For this, I will just use the head x.y coordinates.
+
+```{r}
+distance.data <- 
+  data %>% 
+  #dplyr::filter(instance.score > 1) %>% 
+  dplyr::select(-starts_with("tail")) %>% 
+  mutate(
+    dx = head.x - lag(head.x, n = 1),
+    dy = head.y  - lag(head.y, n = 1)
+  ) %>%
+  # Calculate the distance using Pythagoras' theorem
+  mutate(
+    distance = sqrt(dx^2 + dy^2)
+  )
+  
+
+distance.data %>% 
+  ggplot(aes(x = frame_idx, y = distance)) + 
+  geom_point() +
+  geom_label_repel(aes(label = frame_idx), 
+                   data = . %>% 
+                     dplyr::filter(distance > 110))
+
+distance.data %>% 
+  dplyr::filter(frame_idx < 1000) %>% 
+  ggplot(aes(
+    x = head.x, y = head.y, 
+    colour = distance 
+  )) + 
+  geom_point(
+    size = 4
+  ) + 
+  transition_states(
+    frame_idx, 
+    transition_length = 1,wrap = T,
+    state_length = 1) +
+  shadow_trail(
+    alpha = 0.3,
+    max_frames = 10) +
+  scale_x_continuous(limits = c(0, 200)) +
+  scale_y_continuous(limits = c(0, 200)) +
+  scale_color_viridis_c()
+```
