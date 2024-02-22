@@ -1,0 +1,105 @@
+* Block Type = 96well
+* Chemistry = SYBR_GREEN
+* Experiment File Name = D:\Applied Biosystems\StepOne Software v2.3\experiments\Lardelli\New Folder\KB_20230821_salbutamolExp1_2_nagluhomxhet7m_genotyping.eds
+* Experiment Run End Time = 2023-08-21 10:16:59 AM PDT
+* Instrument Type = steponeplus
+* Passive Reference = 
+
+[Sample Setup]
+Well	Sample Name	Sample Color	Biogroup Name	Biogroup Color	Target Name	Target Color	Task	Reporter	Quencher	Comments
+A1					naglu	"RGB(139,189,249)"	NTC	SYBR	None	
+A2	het pos control	"RGB(247,255,168)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+A3	hom pos control	"RGB(180,255,0)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+A4	Sample 1	"RGB(132,193,241)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+A5	Sample 2	"RGB(168,255,222)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+A6	Sample 3	"RGB(223,221,142)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+A7	Sample 4	"RGB(247,255,168)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+A8	Sample 5	"RGB(180,255,0)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+A9	Sample 6	"RGB(255,204,153)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+A10	Sample 7	"RGB(253,138,88)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+A11	Sample 8	"RGB(213,244,165)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+A12	Sample 9	"RGB(96,255,160)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+B1	Sample 10	"RGB(132,193,241)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+B2	Sample 11	"RGB(168,255,222)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+B3	Sample 12	"RGB(223,221,142)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+B4	Sample 13	"RGB(247,255,168)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+B5	Sample 14	"RGB(180,255,0)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+B6	Sample 15	"RGB(255,204,153)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+B7	Sample 16	"RGB(253,138,88)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+B8	Sample 17	"RGB(213,244,165)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+B9	Sample 18	"RGB(96,255,160)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+B10	Sample 19	"RGB(132,193,241)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+B11	Sample 20	"RGB(168,255,222)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+B12	Sample 21	"RGB(223,221,142)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+C1	Sample 22	"RGB(247,255,168)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+C2	Sample 23	"RGB(180,255,0)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+C3	Sample 24	"RGB(255,204,153)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+C4	Sample 25	"RGB(253,138,88)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+C5	Sample 26	"RGB(213,244,165)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+C6	Sample 27	"RGB(96,255,160)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+C7	Sample 28	"RGB(132,193,241)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+C8	Sample 29	"RGB(168,255,222)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+C9	Sample 30	"RGB(223,221,142)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+C10	Sample 31	"RGB(247,255,168)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+C11	Sample 32	"RGB(180,255,0)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+C12	Sample 33	"RGB(255,204,153)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+D1	Sample 34	"RGB(253,138,88)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+D2	Sample 35	"RGB(213,244,165)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+D3	Sample 36	"RGB(96,255,160)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+D4	Sample 37	"RGB(132,193,241)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+D5	Sample 38	"RGB(168,255,222)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+D6	Sample 39	"RGB(223,221,142)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+D7	Sample 40	"RGB(247,255,168)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+D8	Sample 41	"RGB(180,255,0)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+D9	Sample 42	"RGB(255,204,153)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+D10	Sample 43	"RGB(253,138,88)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+D11	Sample 44	"RGB(213,244,165)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+D12	Sample 45	"RGB(96,255,160)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+E1	Sample 46	"RGB(132,193,241)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+E2	Sample 47	"RGB(168,255,222)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+E3	Sample 48	"RGB(223,221,142)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+E4	Sample 49	"RGB(247,255,168)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+E5	Sample 50	"RGB(180,255,0)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+E6	Sample 51	"RGB(255,204,153)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+E7	Sample 52	"RGB(253,138,88)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+E8	Sample 53	"RGB(213,244,165)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+E9	Sample 54	"RGB(96,255,160)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+E10	Sample 55	"RGB(132,193,241)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+E11	Sample 56	"RGB(168,255,222)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+E12	Sample 57	"RGB(223,221,142)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+F1	Sample 58	"RGB(247,255,168)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+F2	Sample 59	"RGB(180,255,0)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+F3	Sample 60	"RGB(255,204,153)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+F4	Sample 61	"RGB(253,138,88)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+F5	Sample 62	"RGB(213,244,165)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+F6	Sample 63	"RGB(96,255,160)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+F7	Sample 64	"RGB(132,193,241)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+F8	Sample 65	"RGB(168,255,222)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+F9	Sample 66	"RGB(223,221,142)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+F10	Sample 67	"RGB(247,255,168)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+F11	Sample 68	"RGB(180,255,0)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+F12	Sample 69	"RGB(255,204,153)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+G1	Sample 70	"RGB(253,138,88)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+G2	Sample 71	"RGB(213,244,165)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+G3	Sample 72	"RGB(96,255,160)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+G4	Sample 73	"RGB(132,193,241)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+G5	Sample 74	"RGB(168,255,222)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+G6	Sample 75	"RGB(223,221,142)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+G7	Sample 76	"RGB(247,255,168)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+G8	Sample 77	"RGB(180,255,0)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+G9	Sample 78	"RGB(255,204,153)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+G10	Sample 79	"RGB(253,138,88)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+G11	Sample 80	"RGB(213,244,165)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+G12	Sample 81	"RGB(96,255,160)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+H1	Sample 82	"RGB(132,193,241)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+H2	Sample 83	"RGB(168,255,222)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+H3	Sample 84	"RGB(223,221,142)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+H4	Sample 85	"RGB(247,255,168)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+H5	Sample 86	"RGB(180,255,0)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+H6	Sample 87	"RGB(255,204,153)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+H7	Sample 88	"RGB(253,138,88)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+H8	Sample 89	"RGB(213,244,165)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+H9	Sample 90	"RGB(96,255,160)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+H10	Sample 91	"RGB(132,193,241)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+H11	Sample 92	"RGB(168,255,222)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
+H12	Sample 93	"RGB(223,221,142)"			naglu	"RGB(139,189,249)"	UNKNOWN	SYBR	None	
