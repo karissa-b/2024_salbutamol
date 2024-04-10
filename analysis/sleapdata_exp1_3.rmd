@@ -50,7 +50,7 @@ library(MASS)
 theme_set(theme_classic())
 ```
 
-# intro
+# Introduction
 
 I have used sleap.ai to predict the location of the head and tail base of each fish (x and y coordinates). Here, I will analyse these data to calculate:
 
@@ -87,12 +87,13 @@ head(data) %>%
 
 ```
 
-Note that this video was originally recorded at 30 fps, but then written at 1 fpf (i.e. skipping 29 frames.) So the `frame_idx` column means seconds. Note this may not be true for other videos read in at 30 fps
+Note that this video was originally recorded at 30 fps, but then written at 1 fps (i.e. skipping 29 frames.) So the `frame_idx` column means seconds. Note this may not be true for other videos read in at 30 fps
 
 ## plot some data
 
 ## head only
 
+First look at how the fish head moves for the first 40 s. Increasing the number of frames means this video is bigger and goes faster. 
 ```{r}
 data %>% 
   dplyr::filter(frame_idx < 40) %>% 
@@ -112,12 +113,12 @@ data %>%
     max_frames = 10) +
   scale_x_continuous(limits = c(0, 200)) +
   scale_y_continuous(limits = c(0, 200)) +
-  scale_color_viridis_c() +
-  theme_bw()
+  scale_color_viridis_c() 
 ```
 
 ## head and body
 
+Now look at the head + body, and can have an arrow pointing in the direction of travel.
 ```{r}
 data %>% 
   dplyr::filter(frame_idx < 40) %>% 
@@ -149,7 +150,9 @@ data %>%
 
 ## defining zones
 
-I need to define the zones of the Y maze.
+I need to define the zones of the Y maze, as this is how I need to calculate the alternations. 
+
+I will first define the x.y. coordinates of the corners of the Ymaze, and use some trigonometry to define the zone 4 triangle.
 
 ```{r}
 # define the corner/nodes of the Y shape 
@@ -204,6 +207,7 @@ data %<>%
         TRUE ~ zone
     ))
   
+# Check this worked/ 
 data %>% 
   dplyr::filter(!is.na(head.x)) %>% # omit instances where the head was not detected. 
   ggplot(aes(
@@ -244,13 +248,12 @@ data %>%
 
 # Calculating distance traveled.
 
-For this, I will just use the head x.y coordinates. Each 
+For this, I will just use the head x.y coordinates.
 
 ```{r}
 distance.data <- 
   data %>% 
   dplyr::filter(!is.na(head.x)) %>% # omit the fish with no head coordinates
-  dplyr::select(-starts_with("tail")) %>% 
   mutate(
     dx = head.x - lag(head.x, n = 1),
     dy = head.y  - lag(head.y, n = 1)
@@ -261,7 +264,7 @@ distance.data <-
   )
   
 distance.data %>% 
-  dplyr::filter(frame_idx < 1000) %>% 
+  dplyr::filter(frame_idx < 40) %>% 
   ggplot(aes(
     x = head.x, y = head.y, 
     colour = zone 
@@ -282,4 +285,184 @@ distance.data %>%
   scale_color_viridis_d()
 ```
 
-data
+# All fish
+
+## Import and cleaup data
+Now I have an idea of how this data is processed, I will do for all fish. I first need to tidy-up all my names of the data and metadata to match so they can be joined. 
+
+```{r}
+# recursively read in all csv files. 
+data <- sleap_files %>% 
+  sapply(function(x) {
+    read_csv(x) %>% 
+      dplyr:::select(-track)
+  }, simplify = F)
+
+# tidy up the names of the list
+names(data) <- str_remove(names(data), 
+                          pattern = "data/exp1.3/sleap_data/labels.v001.+_")
+names(data) <- str_remove(names(data), 
+                          pattern = ".analysis.csv")
+
+# add the video_id number and y-maze position data to each element of the list so they can be joined to the metadaya
+data %<>% map2(names(data), ~.x %>% mutate(video = .y))
+
+# split the name and ymaze position into 2 separate columns
+data %<>% 
+  lapply(function(x) {x %>% 
+      separate_wider_delim(cols = "video", delim = "-", names = c("video", "position"))
+  })
+
+# fix the videoFile column in the metadata
+meta %<>% 
+  mutate(
+    # the video file 
+    video = str_remove(videoFile, 
+                       pattern = "YMaze_tracking.+-.+T") %>% 
+      str_remove(pattern = "-f30.avi"), 
+    # fix y-maze position so it is 0-based (like in python)
+    position = as.numeric(ymazePosition) - 1, 
+    position = as.character(position), 
+    geno_treat = paste0(genotype, treatment)
+         )
+
+# join the metadata to the tracking data
+data %<>% 
+  lapply(function(x) {
+    x %>% 
+      left_join(meta, by = c("position", "video"))
+  })
+```
+
+### calculate zones
+Since all the videos are technically the same, the same coordinates can be used for all videos. 
+```{r}
+# define the corner/nodes of the Y shape 
+x1 = 10
+x2 = 25
+x3 = 85
+x4 = 105
+x5 = 125
+x6 = 185
+x7 = 200
+
+y1 = 10
+y2 = 40
+y3 = 50   
+y4 = 85
+y5 = 185
+
+# Function to calculate area of a triangle
+area <- function(x1, y1, x2, y2, x3, y3) {
+  return(abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2))
+}
+
+# Function to check if a point is inside the triangle
+is_inside <- function(x, y, x1, y1, x2, y2, x3, y3) {
+  # Calculate area of the triangle
+  triangle_area <- area(x1, y1, x2, y2, x3, y3)
+  
+  # Calculate areas of sub-triangles formed by point and each triangle vertex
+  A1 <- area(x, y, x2, y2, x3, y3)
+  A2 <- area(x1, y1, x, y, x3, y3)
+  A3 <- area(x1, y1, x2, y2, x, y)
+  
+  # Check if sum of sub-triangle areas equals main triangle area
+  return(abs(triangle_area - (A1 + A2 + A3)) < 1e-6)
+}
+
+# add a column defining the zone of each instance  
+data %<>% 
+  lapply(function(x) {
+    x %>% 
+      mutate(
+        # define the arms of the maze first 
+        zone = case_when(
+          head.y >= y4 & between(head.x, left = x3, right = x5)  ~ "1", 
+          head.x >= x4 & between(head.y, left = y1, right = y4)  ~ "2", 
+          head.x <= x4 & between(head.y, left = y1, right = y4)  ~ "3" 
+        ), 
+        # now define the central zone, overwriting the other zones if relevant 
+        zone = case_when(
+          is_inside(x = head.x, y = head.y, 
+                    x1 = x3, x2 = x5, x3 = x4, 
+                    y1 = y4, y2 = y4, y3 = y3) ~ "4" , 
+          TRUE ~ zone
+        ))
+  })
+    
+# Check this worke 
+data %>% 
+  bind_rows() %>% 
+  dplyr::filter(!is.na(head.x)) %>% # omit instances where the head was not detected. 
+  dplyr::filter(fish_id %in% 2:11) %>% 
+  ggplot(aes(
+    x = head.x, y = head.y, 
+    colour = zone 
+  )) + 
+  geom_point(
+    size = 4, 
+    alpha = 0.5
+  ) +
+  theme_linedraw() +
+  scale_x_continuous(
+    limits = c(0,200), 
+    breaks = seq(0, 200, by = 10)
+  ) + 
+    scale_y_continuous(
+    limits = c(0,200), 
+    breaks = seq(0, 200, by = 10)
+  ) +
+  theme(
+    aspect.ratio = 1
+  ) +
+  scale_color_viridis_d() +
+  facet_wrap(~fish_id)
+```
+
+### distance travelled 
+```{r}
+data %<>% 
+  lapply(function(x) {
+    x %>% 
+      dplyr::filter(!is.na(head.x)) %>% # omit the fish with no head coordinates
+      mutate(
+        dx = head.x - lag(head.x, n = 1),
+        dy = head.y  - lag(head.y, n = 1)
+      ) %>%
+      # Calculate the distance using Pythagoras' theorem
+      mutate(
+        distance.pixels = sqrt(dx^2 + dy^2), 
+        distance.cm = distance.pixels / 22.5 # based on 2 cm = 45 pixels
+      )
+  })
+
+data %>% 
+  bind_rows() %>% 
+  ggplot(aes(x = frame_idx, y = distance.cm)) +
+  geom_smooth(aes(group = geno_treat, colour = geno_treat))
+```
+
+### bins 
+
+Each frame represents 2 seconds in this experiment. This is a weird thing i did in caputing this data. next analyses should be careful to make sure the representation is right. Calculated that 6 bins should capture the whole hour. 
+```{r}
+data %<>% 
+  lapply(function(x) {
+    x %>% 
+      mutate(bin = ceiling(frame_idx / (120 * 10)))
+  }) 
+```
+
+# Analysis of total distance travelled
+
+I will first look at the total distance travelled in cm. 
+```{r}
+data %>% 
+  bind_rows()
+  
+```
+
+
+
+
