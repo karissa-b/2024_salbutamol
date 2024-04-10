@@ -52,7 +52,7 @@ theme_set(theme_classic())
 
 # intro
 
-I have used sleap to predict the location of the head and tail base of each fish (x and y coordinates). Here, I will analyse these data to calculate:
+I have used sleap.ai to predict the location of the head and tail base of each fish (x and y coordinates). Here, I will analyse these data to calculate:
 
 -   distance traveled
 
@@ -62,11 +62,22 @@ I have used sleap to predict the location of the head and tail base of each fish
 
 -   time in each zones
 
+-   distance in each zones
+
+-   zone changes
+
 all files are read in, but I will just analyse one file from one fish for now.
 
 ```{r}
 sleap_files <- list.files("data/exp1.3/sleap_data", 
            full.names = TRUE)
+
+meta <- readRDS("data/exp1.3/metadata_withGenotype.rds") %>% 
+  dplyr::filter(genotype %in% c("het", "hom")) %>% 
+  mutate(sex = case_when(
+    grepl(sex, pattern = "m") ~ "m", 
+    TRUE ~ sex
+  ))
 
 data <- read_csv(sleap_files[2]) %>% 
   dplyr:::select(-track)
@@ -101,14 +112,15 @@ data %>%
     max_frames = 10) +
   scale_x_continuous(limits = c(0, 200)) +
   scale_y_continuous(limits = c(0, 200)) +
-  scale_color_viridis_c()
+  scale_color_viridis_c() +
+  theme_bw()
 ```
 
 ## head and body
 
 ```{r}
 data %>% 
-  dplyr::filter(frame_idx < 100) %>% 
+  dplyr::filter(frame_idx < 40) %>% 
   ggplot() + 
    geom_segment(
      aes(xend = head.x, 
@@ -140,16 +152,61 @@ data %>%
 I need to define the zones of the Y maze.
 
 ```{r}
-data %<>% 
-  mutate(zone = case_when(
-    head.y > 85 & between(head.x, left = 85, right = 125)  ~ "1", 
-    head.x > 120 & between(head.y, left = 10, right = 80)  ~ "2", 
-    head.x < 90 & between(head.y, left = 10, right = 85)  ~ "3", 
-    TRUE ~ "4"
-           ))
+# define the corner/nodes of the Y shape 
+x1 = 10
+x2 = 25
+x3 = 85
+x4 = 105
+x5 = 125
+x6 = 185
+x7 = 200
+
+y1 = 10
+y2 = 40
+y3 = 50   
+y4 = 85
+y5 = 185
+
+  
+# Function to calculate area of a triangle
+area <- function(x1, y1, x2, y2, x3, y3) {
+  return(abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2))
+}
+
+# Function to check if a point is inside the triangle
+is_inside <- function(x, y, x1, y1, x2, y2, x3, y3) {
+  # Calculate area of the triangle
+  triangle_area <- area(x1, y1, x2, y2, x3, y3)
+  
+  # Calculate areas of sub-triangles formed by point and each triangle vertex
+  A1 <- area(x, y, x2, y2, x3, y3)
+  A2 <- area(x1, y1, x, y, x3, y3)
+  A3 <- area(x1, y1, x2, y2, x, y)
+  
+  # Check if sum of sub-triangle areas equals main triangle area
+  return(abs(triangle_area - (A1 + A2 + A3)) < 1e-6)
+}
+
+# add a column defining the zone of each instance  
+data %<>%
+  mutate(
+    # define the arms of the maze first 
+    zone = case_when(
+      head.y >= y4 & between(head.x, left = x3, right = x5)  ~ "1", 
+      head.x >= x4 & between(head.y, left = y1, right = y4)  ~ "2", 
+      head.x <= x4 & between(head.y, left = y1, right = y4)  ~ "3" 
+    ), 
+    # now define the central zone, overwriting the other zones if relevant 
+    zone = case_when(
+        is_inside(x = head.x, y = head.y, 
+                x1 = x3, x2 = x5, x3 = x4, 
+                y1 = y4, y2 = y4, y3 = y3) ~ "4" , 
+        TRUE ~ zone
+    ))
   
 data %>% 
-ggplot(aes(
+  dplyr::filter(!is.na(head.x)) %>% # omit instances where the head was not detected. 
+  ggplot(aes(
     x = head.x, y = head.y, 
     colour = zone 
   )) + 
@@ -175,20 +232,24 @@ ggplot(aes(
 
 # Assessing the score
 
+There is an instance score associated with the instance, which represents how confident sleap was at finding the fish head and tail. 
+
+The instance score increases over the first few frames, then looks mostly uniform. My manual inspection of the videos showed it was very good at finding the fish so I will not omit any instances at this stage. 
+
 ```{r}
 data %>% 
   ggplot(aes(x = frame_idx, y = instance.score)) + 
   geom_point()
 ```
 
-# Calculating distance traveled. 
+# Calculating distance traveled.
 
-For this, I will just use the head x.y coordinates.
+For this, I will just use the head x.y coordinates. Each 
 
 ```{r}
 distance.data <- 
   data %>% 
-  #dplyr::filter(instance.score > 1) %>% 
+  dplyr::filter(!is.na(head.x)) %>% # omit the fish with no head coordinates
   dplyr::select(-starts_with("tail")) %>% 
   mutate(
     dx = head.x - lag(head.x, n = 1),
@@ -199,31 +260,26 @@ distance.data <-
     distance = sqrt(dx^2 + dy^2)
   )
   
-
-distance.data %>% 
-  ggplot(aes(x = frame_idx, y = distance)) + 
-  geom_point() +
-  geom_label_repel(aes(label = frame_idx), 
-                   data = . %>% 
-                     dplyr::filter(distance > 110))
-
 distance.data %>% 
   dplyr::filter(frame_idx < 1000) %>% 
   ggplot(aes(
     x = head.x, y = head.y, 
-    colour = distance 
+    colour = zone 
   )) + 
   geom_point(
     size = 4
   ) + 
   transition_states(
     frame_idx, 
-    transition_length = 1,wrap = T,
-    state_length = 1) +
+    transition_length = 10,
+    #wrap = T,
+    state_length = 0.1) +
   shadow_trail(
     alpha = 0.3,
     max_frames = 10) +
   scale_x_continuous(limits = c(0, 200)) +
   scale_y_continuous(limits = c(0, 200)) +
-  scale_color_viridis_c()
+  scale_color_viridis_d()
 ```
+
+data
