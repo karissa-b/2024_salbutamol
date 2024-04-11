@@ -102,7 +102,8 @@ Note that this video was originally recorded at 30 fps, but then written at 1 fp
 
 ## head only
 
-First look at how the fish head moves for the first 40 s. Increasing the number of frames means this video is bigger and goes faster. 
+First look at how the fish head moves for the first 40 s. Increasing the number of frames means this video is bigger and goes faster.
+
 ```{r}
 data %>% 
   dplyr::filter(frame_idx < 40) %>% 
@@ -128,6 +129,7 @@ data %>%
 ## head and body
 
 Now look at the head + body, and can have an arrow pointing in the direction of travel.
+
 ```{r}
 data %>% 
   dplyr::filter(frame_idx < 40) %>% 
@@ -159,7 +161,7 @@ data %>%
 
 ## defining zones
 
-I need to define the zones of the Y maze, as this is how I need to calculate the alternations. 
+I need to define the zones of the Y maze, as this is how I need to calculate the alternations.
 
 I will first define the x.y. coordinates of the corners of the Ymaze, and use some trigonometry to define the zone 4 triangle.
 
@@ -245,9 +247,9 @@ data %>%
 
 # Assessing the score
 
-There is an instance score associated with the instance, which represents how confident sleap was at finding the fish head and tail. 
+There is an instance score associated with the instance, which represents how confident sleap was at finding the fish head and tail.
 
-The instance score increases over the first few frames, then looks mostly uniform. My manual inspection of the videos showed it was very good at finding the fish so I will not omit any instances at this stage. 
+The instance score increases over the first few frames, then looks mostly uniform. My manual inspection of the videos showed it was very good at finding the fish so I will not omit any instances at this stage.
 
 ```{r}
 data %>% 
@@ -297,7 +299,8 @@ distance.data %>%
 # All fish
 
 ## Import and cleaup data
-Now I have an idea of how this data is processed, I will do for all fish. I first need to tidy-up all my names of the data and metadata to match so they can be joined. 
+
+Now I have an idea of how this data is processed, I will do for all fish. I first need to tidy-up all my names of the data and metadata to match so they can be joined.
 
 ```{r}
 # recursively read in all csv files. 
@@ -343,7 +346,9 @@ data %<>%
 ```
 
 ### calculate zones
-Since all the videos are technically the same, the same coordinates can be used for all videos. 
+
+Since all the videos are technically the same, the same coordinates can be used for all videos.
+
 ```{r}
 # define the corner/nodes of the Y shape 
 x1 = 10
@@ -428,7 +433,8 @@ data %>%
   facet_wrap(~fish_id)
 ```
 
-### distance travelled 
+### distance travelled
+
 ```{r}
 data %<>% 
   lapply(function(x) {
@@ -451,9 +457,10 @@ data %>%
   geom_smooth(aes(group = geno_treat, colour = geno_treat))
 ```
 
-### bins 
+### bins
 
-Each frame represents 2 seconds in this experiment. This is a weird thing i did in caputing this data. next analyses should be careful to make sure the representation is right. Calculated that 6 bins should capture the whole hour. 
+Each frame represents 2 seconds in this experiment. This is a weird thing i did in caputing this data. next analyses should be careful to make sure the representation is right. Calculated that 6 bins should capture the whole hour.
+
 ```{r}
 data %<>% 
   lapply(function(x) {
@@ -476,11 +483,11 @@ data %<>%
   }) 
 ```
 
-
 # Analysis of total distance travelled
 
 ## raw distance data: whole hour
-I will first look at the total distance traveled in cm in an hour. No apparent differences between mutants. 
+
+I will first look at the total distance traveled in cm in an hour. No apparent differences between mutants.
 
 ```{r}
 data %>% 
@@ -501,7 +508,7 @@ data %>%
 
 ## raw distance travelled: 10 minute bins
 
-It is possible that the total distance travelled is the same, but perhaps the mutants behave differently across the hour in the test (e.g. different at the start v the end).  This is not the case, and no stark differences are obsevred between the mutants. 
+It is possible that the total distance travelled is the same, but perhaps the mutants behave differently across the hour in the test (e.g. different at the start v the end). This is not the case, and no stark differences are obsevred between the mutants.
 
 ```{r}
 data %>% 
@@ -520,9 +527,10 @@ data %>%
   facet_wrap(~sex+treatment)
 ```
 
-## statistical test: linear mixed model 
+## statistical test: linear mixed model
 
-The total distance traveled per 10 minute data was fit to a linear mixed model. The effects of genotype, treatment, sex and bin were tested for statistical significance. However, no statistically significanct effect of genotype or treatment is is observed. 
+The total distance traveled per 10 minute data was fit to a linear mixed model. The effects of genotype, treatment, sex and bin were tested for statistical significance. However, no statistically significanct effect of genotype or treatment is is observed.
+
 ```{r}
 # first, add the distnce data to the data object. 
 data %<>% 
@@ -635,13 +643,15 @@ print(emmeans(fit.dists, ~ genotype * treatment * bin * sex),
 # Analysis of time spent moving
 
 ## raw data: whole hour
-It is possible that while the distance traveled is not affected between mutant genotypes, but the time spent moving is. For example, the normal fish might have constant movement but the mutant fish might stop start. 
 
-I first need to define whether a fish is considered moving or not. After watching some of the videos, I will consider a fish moving if it moves more than 0.4 cm per frame (i.e. > 0.2 cm/s) 
+It is possible that while the distance traveled is not affected between mutant genotypes, but the time spent moving is. For example, the normal fish might have constant movement but the mutant fish might stop start.
+
+I first need to define whether a fish is considered moving or not. After watching some of the videos, I will consider a fish moving if it moves more than 0.4 cm per frame (i.e. \> 0.2 cm/s)
 
 ```{r}
 moving.threshold = 0.4
 ```
+
 ```{r}
 data %>% 
   bind_rows() %>% 
@@ -674,7 +684,7 @@ data %>%
 
 ## raw data: 10 minute bins
 
-Like the distance travelled, the proportion of time spent moving could also change across the hour. Generally the fish spend less time moving in the final bin. But not much difference between genotypes. 
+Like the distance travelled, the proportion of time spent moving could also change across the hour. Generally the fish spend less time moving in the final bin. But not much difference between genotypes.
 
 ```{r}
 data %>% 
@@ -706,9 +716,9 @@ data %>%
 
 ## statistical test: generalised linear mixed model (beta-dist)
 
-Proportion of time spend moving data was fitted to a generalised linear mixed model with a beta distribution and logit link function. 
+Proportion of time spend moving data was fitted to a generalised linear mixed model with a beta distribution and logit link function.
 
-A statistically significant effect of treatment (and bin) was found, but not of genotype. 
+A statistically significant effect of treatment (and bin) was found, but not of genotype.
 
 ```{r}
 # first add the prop.moving data to the object. 
@@ -815,20 +825,167 @@ emmeans(fit.time.moving, ~ genotype * treatment * bin * sex,
     position = position_dodge(0.75),
     show.legend = F
     ) +
+  scale_color_manual(values = c("grey70", "orangered", "green4")) +
   facet_wrap(~sex, scales = "free_x") +
   labs(
-    title = "Total distance travelled per genotype, treatment, sex and bin ", 
+    title = "Average prop of spent moving travelled per genotype, treatment, sex and bin ", 
     subtitle = paste0("p = ", an.moving['genotype:treatment:bin:sex','Pr(>Chisq)']), 
     y = "Model-predicted proportion of time spent moving"
   )
 ```
 
+# Analysis of active velocity
+
+So now the question is when the mutants are moving, what is the average speed per ?
+
+## raw data: average active velocity over the whole hour. 
+
+Overall the active velocity seems very similar between groups. 
+
+```{r}
+data %>% 
+  dplyr::filter(moving == TRUE) %>% # only look at the time when actually moving. 
+  mutate(
+    speed.cm.s = distance.cm/2, # distance travellled per second. 
+    .after = distance.cm
+  ) %>% 
+  group_by(fish_id) %>% 
+  mutate(
+    ave.active.velovity.cms = mean(speed.cm.s), 
+    .after = speed.cm.s
+  ) %>% 
+  dplyr::distinct(fish_id, .keep_all = T) %>% 
+  ggplot(
+    aes(x = treatment, y = ave.active.velovity.cms, colour = genotype)
+  ) + 
+  geom_jitter() +
+  geom_boxplot() +
+  facet_wrap(~sex) +
+  scale_color_manual(values = c("grey70", "orangered"))
+```
+
+## raw data: 10 minute bins
+
+The active velocity per fish also looks similar across groups when looking within 10 min bins. 
+
+```{r}
+data %>% 
+  dplyr::filter(moving == T) %>% 
+  group_by(fish_id) %>% # to calculate total distance travelled per fish and bin.
+  mutate(
+    speed.cm.s = distance.cm/2, # distance travellled per second. 
+    .after = distance.cm
+  ) %>% 
+  group_by(fish_id, bin) %>% 
+  mutate(
+    ave.active.velovity.cms.perbin = mean(speed.cm.s), 
+    .after = speed.cm.s
+  ) %>% 
+  dplyr::distinct(fish_id, bin, .keep_all = TRUE) %>% 
+  ggplot(
+    aes(x = bin, y = ave.active.velovity.cms.perbin, colour = geno_treat)
+    ) + 
+  geom_jitter() +
+  geom_boxplot() +
+  facet_wrap(~sex+treatment)
+```
+
+## statistical test: linear mixed model
+
+The average active velocity data per 10 mins was fit to a linear mixed model. The effects of genotype, treatment, sex and bin were tested for statistical significance. However, no statistically significanct effect of genotype or treatment is is observed.
+
+```{r}
+# first, add the active vel data to the data object. 
+active.vel <- data %>% 
+   group_by(fish_id) %>% # to calculate total distance travelled per fish and bin.
+  mutate(
+    speed.cm.s = distance.cm/2, # distance travellled per second. 
+    .after = distance.cm
+  ) %>% 
+  dplyr::filter(moving == T) %>% 
+  group_by(fish_id, bin) %>% 
+  mutate(
+    ave.active.velovity.cms.perbin = mean(speed.cm.s), 
+    .after = speed.cm.s
+  )
+
+data %<>% 
+  left_join(active.vel) 
+
+# no longer need this. 
+remove(active.vel)
+  
+fit.active.velocity <- 
+  data %>% 
+  dplyr::filter(moving == T) %>% 
+  dplyr::distinct(fish_id, bin, .keep_all = TRUE) %>% 
+  lmer(ave.active.velovity.cms.perbin ~ genotype*treatment*bin*sex + (1|behavBatch) +(1|fish_id), 
+       data = .)
+
+# check model assumptions
+# all look ok
+# check_model(fit.active.velocity)
+
+# type II wald x2 test for statistical significnace of fixed effects
+an.activevel <- Anova(fit.active.velocity) %>% signif(2)
+
+#emmeans(fit.dists, list(pairwise ~ genotype * treatment * sex), adjust = "tukey")
+
+# geno treat sex
+emmeans(fit.active.velocity, ~ genotype * treatment * sex, type = "response") %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = treatment, y = emmean, colour = genotype)) +
+  geom_col(
+    aes(fill = genotype), 
+    alpha = 0.75,
+    width = 0.75,
+    position = position_dodge(width = 0.75)
+  ) +
+  geom_errorbar(
+    aes(ymin =  lower.CL, ymax = upper.CL),
+    width = 0.5, 
+    position = position_dodge(width = 0.75)
+    ) +
+  facet_wrap(~sex, nrow = 1) + 
+  scale_color_manual(values = c("grey50", "orangered")) +
+  scale_fill_manual(values = c("grey50", "orangered")) +
+  labs(
+    title = "TActive velocity", 
+    subtitle = paste0("p = ", an.activevel['genotype:treatment:sex','Pr(>Chisq)']), 
+    y = "Model-predicted active velocity (cm/s)"
+  )
 
 
-
-
-
-
-
-
-
+# geno treat bin
+emmeans(fit.active.velocity, ~ genotype * treatment * bin * sex, 
+      type = "response") %>% 
+  as_tibble() %>% 
+  mutate(group = paste0(genotype, "_", 
+                        treatment, "_", 
+                        sex), 
+         genotreat = paste0(genotype, "_", treatment)) %>% 
+  dplyr::filter(genotreat != "het_20 µM Salbutamol") %>% 
+  ggplot(aes(x = bin, y = emmean, colour = genotreat)) +
+  geom_point(
+    aes(fill =group), 
+    alpha = 0.75,
+    position = position_dodge(width = 0.75)
+    ) +
+  geom_errorbar(
+    aes(ymin =  lower.CL, ymax = upper.CL),
+    position = position_dodge(0.75)
+    ) +
+  geom_line(
+    aes(group = group), 
+    position = position_dodge(0.75),
+    show.legend = F
+    ) +
+  facet_wrap(~sex, scales = "free_x") +
+  scale_color_viridis_d(option = "turbo", end = 0.9) +
+  scale_fill_viridis_d(option = "turbo", end = 0.9) +
+  labs(
+    title = "Active velocity", 
+    subtitle = paste0("p = ", an.activevel['genotype:treatment:bin:sex','Pr(>Chisq)']), 
+    y = "Model-predicted total distance travelled (cm)"
+  )
+```
