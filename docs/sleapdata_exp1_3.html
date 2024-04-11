@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="" />
+
+<meta name="date" content="2024-02-22" />
+
+<title>sleapdata_exp1_3</title>
+
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">2023_MPSIII_salbutamol</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">sleapdata_exp1_3</h1>
+<h4 class="author"></h4>
+<h4 class="date">2024-02-22</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2024-04-11
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>2024_salbutamol/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230614code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230614)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20230614code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20230614)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomkarissab2024salbutamoltree3113c27a2b81918f67010ca9e60ca17ae40a4c57targetblank3113c27a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/karissa-b/2024_salbutamol/tree/3113c27a2b81918f67010ca9e60ca17ae40a4c57" target="_blank">3113c27</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomkarissab2024salbutamoltree3113c27a2b81918f67010ca9e60ca17ae40a4c57targetblank3113c27a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/karissa-b/2024_salbutamol/tree/3113c27a2b81918f67010ca9e60ca17ae40a4c57" target="_blank">3113c27</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Unstaged changes:
+    Modified:   analysis/sleapdata_exp1_3.rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/sleapdata_exp1_3.rmd</code>) and
+HTML (<code>docs/sleapdata_exp1_3.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/karissa-b/2024_salbutamol/blob/3113c27a2b81918f67010ca9e60ca17ae40a4c57/analysis/sleapdata_exp1_3.rmd" target="_blank">3113c27</a>
+</td>
+<td>
+Karissa Barthelson
+</td>
+<td>
+2024-04-11
+</td>
+<td>
+added distance travelled analysis
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/karissa-b/2024_salbutamol/blob/7121ff8dd3ab41f2e28e9408e71bb0f291a5b3e6/analysis/sleapdata_exp1_3.rmd" target="_blank">7121ff8</a>
+</td>
+<td>
+Karissa Barthelson
+</td>
+<td>
+2024-04-10
+</td>
+<td>
+added distance travelled in cm, other preprovessing
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/karissa-b/2024_salbutamol/blob/ff539f1dcc2e3097d90b4096e868202a48ac5d88/analysis/sleapdata_exp1_3.rmd" target="_blank">ff539f1</a>
+</td>
+<td>
+Karissa Barthelson
+</td>
+<td>
+2024-04-10
+</td>
+<td>
+added the better zone 4 calculation
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/karissa-b/2024_salbutamol/blob/90438c9003f5033a34709873f6dfe3fc83e89f08/analysis/sleapdata_exp1_3.rmd" target="_blank">90438c9</a>
+</td>
+<td>
+Karissa Barthelson
+</td>
+<td>
+2024-02-23
+</td>
+<td>
+First commit
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>library(tidyverse)
+library(readxl)
+library(here)
+library(magrittr)
+library(scales)
+library(readxl)
+library(ggpubr)
+library(ggeasy)
+library(ggfortify)
+library(ggbeeswarm)
+library(ggforce)
+library(ggrepel)
+library(gganimate)
+library(kableExtra)
+library(pander)
+
+# stat analysis
+library(broom)
+library(lme4)
+library(performance)
+library(car)
+library(emmeans)
+library(glmmTMB)
+library(MASS)
+
+# set the default theme for ggplot as theme_bw
+theme_set(theme_classic())</code></pre>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>I have used sleap.ai to predict the location of the head and tail
+base of each fish (x and y coordinates). Here, I will analyse these data
+to calculate:</p>
+<ul>
+<li><p>distance traveled</p></li>
+<li><p>time moving</p></li>
+<li><p>active velocity</p></li>
+<li><p>time in each zones</p></li>
+<li><p>distance in each zones</p></li>
+<li><p>zone changes</p></li>
+</ul>
+<p>all files are read in, but I will just analyse one file from one fish
+for now.</p>
+<pre class="r"><code>sleap_files &lt;- list.files(&quot;data/exp1.3/sleap_data&quot;, 
+           full.names = TRUE)
+
+meta &lt;- 
+  readRDS(&quot;data/exp1.3/metadata_withGenotype.rds&quot;) %&gt;% 
+  dplyr::filter(genotype %in% c(&quot;het&quot;, &quot;hom&quot;)) %&gt;% 
+    arrange(sex, genotype, treatment) %&gt;% # for reordering factors later
+  mutate(sex = case_when(
+    grepl(sex, pattern = &quot;m&quot;) ~ &quot;m&quot;, 
+    TRUE ~ sex
+  ), 
+  geno_treat = paste0(genotype, &quot;_&quot;, treatment) %&gt;% 
+    as.factor() %&gt;% 
+    fct_inorder(),
+  geno_treat_sex = paste0(genotype, &quot;_&quot;, treatment,&quot;_&quot;, sex) %&gt;% 
+    as.factor() %&gt;% 
+    fct_inorder(),
+  .after = sex) 
+
+data &lt;- read_csv(sleap_files[2]) %&gt;% 
+  dplyr:::select(-track)
+
+head(data) %&gt;% 
+  pander</code></pre>
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col width="16%" />
+<col width="23%" />
+<col width="12%" />
+<col width="12%" />
+<col width="17%" />
+<col width="17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">frame_idx</th>
+<th align="center">instance.score</th>
+<th align="center">head.x</th>
+<th align="center">head.y</th>
+<th align="center">head.score</th>
+<th align="center">tailbase.x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0</td>
+<td align="center">0.9514</td>
+<td align="center">19.69</td>
+<td align="center">19.77</td>
+<td align="center">0.3083</td>
+<td align="center">42.12</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">1.249</td>
+<td align="center">20.08</td>
+<td align="center">23.69</td>
+<td align="center">0.5161</td>
+<td align="center">36</td>
+</tr>
+<tr class="odd">
+<td align="center">2</td>
+<td align="center">1.367</td>
+<td align="center">13.83</td>
+<td align="center">38.02</td>
+<td align="center">0.6807</td>
+<td align="center">40.06</td>
+</tr>
+<tr class="even">
+<td align="center">3</td>
+<td align="center">1.067</td>
+<td align="center">65.84</td>
+<td align="center">63.94</td>
+<td align="center">0.3582</td>
+<td align="center">49.95</td>
+</tr>
+<tr class="odd">
+<td align="center">4</td>
+<td align="center">0.8012</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+<td align="center">0</td>
+<td align="center">74.02</td>
+</tr>
+<tr class="even">
+<td align="center">5</td>
+<td align="center">0.9429</td>
+<td align="center">56.13</td>
+<td align="center">48.1</td>
+<td align="center">0.3347</td>
+<td align="center">39.92</td>
+</tr>
+</tbody>
+</table>
+<table style="width:42%;">
+<colgroup>
+<col width="18%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">tailbase.y</th>
+<th align="center">tailbase.score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">31.78</td>
+<td align="center">0.6431</td>
+</tr>
+<tr class="even">
+<td align="center">43.83</td>
+<td align="center">0.7326</td>
+</tr>
+<tr class="odd">
+<td align="center">33.81</td>
+<td align="center">0.6866</td>
+</tr>
+<tr class="even">
+<td align="center">52</td>
+<td align="center">0.7088</td>
+</tr>
+<tr class="odd">
+<td align="center">60.15</td>
+<td align="center">0.7364</td>
+</tr>
+<tr class="even">
+<td align="center">41.95</td>
+<td align="center">0.6082</td>
+</tr>
+</tbody>
+</table>
+<p>Note that this video was originally recorded at 30 fps, but then
+written at 1 fps (i.e. skipping 29 frames.) So the
+<code>frame_idx</code> column means seconds. Note this may not be true
+for other videos read in at 30 fps</p>
+<div id="plot-some-data" class="section level2">
+<h2>plot some data</h2>
+</div>
+<div id="head-only" class="section level2">
+<h2>head only</h2>
+<p>First look at how the fish head moves for the first 40 s. Increasing
+the number of frames means this video is bigger and goes faster.</p>
+<pre class="r"><code>data %&gt;% 
+  dplyr::filter(frame_idx &lt; 40) %&gt;% 
+  ggplot(aes(
+    x = head.x, y = head.y, 
+    colour = frame_idx 
+  )) + 
+  geom_point(
+    size = 4
+  ) + 
+  transition_states(
+    frame_idx, 
+    transition_length = 2,
+    state_length = 1) +
+  shadow_trail(
+    alpha = 0.3,
+    max_frames = 10) +
+  scale_x_continuous(limits = c(0, 200)) +
+  scale_y_continuous(limits = c(0, 200)) +
+  scale_color_viridis_c() </code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-2-1.gif" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="head-and-body" class="section level2">
+<h2>head and body</h2>
+<p>Now look at the head + body, and can have an arrow pointing in the
+direction of travel.</p>
+<pre class="r"><code>data %&gt;% 
+  dplyr::filter(frame_idx &lt; 40) %&gt;% 
+  ggplot() + 
+   geom_segment(
+     aes(xend = head.x, 
+         yend = head.y, 
+         x = tailbase.x, 
+         y = tailbase.y, 
+         colour = frame_idx), 
+     arrow = arrow(length = unit(0.1,&quot;cm&quot;)),
+     size = 1
+     ) +
+  transition_states(
+    frame_idx, 
+    transition_length = 2,
+    state_length = 1) +
+  shadow_trail(
+    alpha = 0.3,
+    max_frames = 10) +
+  scale_x_continuous(limits = c(0, 200)) +
+  scale_y_continuous(limits = c(0, 200)) +
+  scale_color_viridis_c() +
+  labs(
+    x = &quot;x&quot;, 
+    y = &quot;y&quot;
+  )</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-3-1.gif" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="defining-zones" class="section level2">
+<h2>defining zones</h2>
+<p>I need to define the zones of the Y maze, as this is how I need to
+calculate the alternations.</p>
+<p>I will first define the x.y. coordinates of the corners of the Ymaze,
+and use some trigonometry to define the zone 4 triangle.</p>
+<pre class="r"><code># define the corner/nodes of the Y shape 
+x1 = 10
+x2 = 25
+x3 = 85
+x4 = 105
+x5 = 125
+x6 = 185
+x7 = 200
+
+y1 = 10
+y2 = 40
+y3 = 50   
+y4 = 85
+y5 = 185
+
+  
+# Function to calculate area of a triangle
+area &lt;- function(x1, y1, x2, y2, x3, y3) {
+  return(abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2))
+}
+
+# Function to check if a point is inside the triangle
+is_inside &lt;- function(x, y, x1, y1, x2, y2, x3, y3) {
+  # Calculate area of the triangle
+  triangle_area &lt;- area(x1, y1, x2, y2, x3, y3)
+  
+  # Calculate areas of sub-triangles formed by point and each triangle vertex
+  A1 &lt;- area(x, y, x2, y2, x3, y3)
+  A2 &lt;- area(x1, y1, x, y, x3, y3)
+  A3 &lt;- area(x1, y1, x2, y2, x, y)
+  
+  # Check if sum of sub-triangle areas equals main triangle area
+  return(abs(triangle_area - (A1 + A2 + A3)) &lt; 1e-6)
+}
+
+# add a column defining the zone of each instance  
+data %&lt;&gt;%
+  mutate(
+    # define the arms of the maze first 
+    zone = case_when(
+      head.y &gt;= y4 &amp; between(head.x, left = x3, right = x5)  ~ &quot;1&quot;, 
+      head.x &gt;= x4 &amp; between(head.y, left = y1, right = y4)  ~ &quot;2&quot;, 
+      head.x &lt;= x4 &amp; between(head.y, left = y1, right = y4)  ~ &quot;3&quot; 
+    ), 
+    # now define the central zone, overwriting the other zones if relevant 
+    zone = case_when(
+        is_inside(x = head.x, y = head.y, 
+                x1 = x3, x2 = x5, x3 = x4, 
+                y1 = y4, y2 = y4, y3 = y3) ~ &quot;4&quot; , 
+        TRUE ~ zone
+    ))
+  
+# Check this worked/ 
+data %&gt;% 
+  dplyr::filter(!is.na(head.x)) %&gt;% # omit instances where the head was not detected. 
+  ggplot(aes(
+    x = head.x, y = head.y, 
+    colour = zone 
+  )) + 
+  geom_point(
+    size = 4, 
+    alpha = 0.5
+  ) +
+  theme_linedraw() +
+  scale_x_continuous(
+    limits = c(0,200), 
+    breaks = seq(0, 200, by = 10)
+  ) + 
+    scale_y_continuous(
+    limits = c(0,200), 
+    breaks = seq(0, 200, by = 10)
+  ) +
+  theme(
+    aspect.ratio = 1
+  ) +
+  scale_color_viridis_d()</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-4-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="assessing-the-score" class="section level1">
+<h1>Assessing the score</h1>
+<p>There is an instance score associated with the instance, which
+represents how confident sleap was at finding the fish head and
+tail.</p>
+<p>The instance score increases over the first few frames, then looks
+mostly uniform. My manual inspection of the videos showed it was very
+good at finding the fish so I will not omit any instances at this
+stage.</p>
+<pre class="r"><code>data %&gt;% 
+  ggplot(aes(x = frame_idx, y = instance.score)) + 
+  geom_point()</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-5-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="calculating-distance-traveled." class="section level1">
+<h1>Calculating distance traveled.</h1>
+<p>For this, I will just use the head x.y coordinates.</p>
+<pre class="r"><code>distance.data &lt;- 
+  data %&gt;% 
+  dplyr::filter(!is.na(head.x)) %&gt;% # omit the fish with no head coordinates
+  mutate(
+    dx = head.x - lag(head.x, n = 1),
+    dy = head.y  - lag(head.y, n = 1)
+  ) %&gt;%
+  # Calculate the distance using Pythagoras&#39; theorem
+  mutate(
+    distance = sqrt(dx^2 + dy^2)
+  )
+  
+distance.data %&gt;% 
+  dplyr::filter(frame_idx &lt; 40) %&gt;% 
+  ggplot(aes(
+    x = head.x, y = head.y, 
+    colour = zone 
+  )) + 
+  geom_point(
+    size = 4
+  ) + 
+  transition_states(
+    frame_idx, 
+    transition_length = 10,
+    #wrap = T,
+    state_length = 0.1) +
+  shadow_trail(
+    alpha = 0.3,
+    max_frames = 10) +
+  scale_x_continuous(limits = c(0, 200)) +
+  scale_y_continuous(limits = c(0, 200)) +
+  scale_color_viridis_d()</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-6-1.gif" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="all-fish" class="section level1">
+<h1>All fish</h1>
+<div id="import-and-cleaup-data" class="section level2">
+<h2>Import and cleaup data</h2>
+<p>Now I have an idea of how this data is processed, I will do for all
+fish. I first need to tidy-up all my names of the data and metadata to
+match so they can be joined.</p>
+<pre class="r"><code># recursively read in all csv files. 
+data &lt;- sleap_files %&gt;% 
+  sapply(function(x) {
+    read_csv(x) %&gt;% 
+      dplyr:::select(-track)
+  }, simplify = F)
+
+# tidy up the names of the list
+names(data) &lt;- str_remove(names(data), 
+                          pattern = &quot;data/exp1.3/sleap_data/labels.v001.+_&quot;)
+names(data) &lt;- str_remove(names(data), 
+                          pattern = &quot;.analysis.csv&quot;)
+
+# add the video_id number and y-maze position data to each element of the list so they can be joined to the metadaya
+data %&lt;&gt;% map2(names(data), ~.x %&gt;% mutate(video = .y))
+
+# split the name and ymaze position into 2 separate columns
+data %&lt;&gt;% 
+  lapply(function(x) {x %&gt;% 
+      separate_wider_delim(cols = &quot;video&quot;, delim = &quot;-&quot;, names = c(&quot;video&quot;, &quot;position&quot;))
+  })
+
+# fix the videoFile column in the metadata
+meta %&lt;&gt;% 
+  mutate(
+    # the video file 
+    video = str_remove(videoFile, 
+                       pattern = &quot;YMaze_tracking.+-.+T&quot;) %&gt;% 
+      str_remove(pattern = &quot;-f30.avi&quot;), 
+    # fix y-maze position so it is 0-based (like in python)
+    position = as.numeric(ymazePosition) - 1, 
+    position = as.character(position)
+         )
+
+# join the metadata to the tracking data
+data %&lt;&gt;% 
+  lapply(function(x) {
+    x %&gt;% 
+      left_join(meta, by = c(&quot;position&quot;, &quot;video&quot;))
+  })</code></pre>
+<div id="calculate-zones" class="section level3">
+<h3>calculate zones</h3>
+<p>Since all the videos are technically the same, the same coordinates
+can be used for all videos.</p>
+<pre class="r"><code># define the corner/nodes of the Y shape 
+x1 = 10
+x2 = 25
+x3 = 85
+x4 = 105
+x5 = 125
+x6 = 185
+x7 = 200
+
+y1 = 10
+y2 = 40
+y3 = 50   
+y4 = 85
+y5 = 185
+
+# Function to calculate area of a triangle
+area &lt;- function(x1, y1, x2, y2, x3, y3) {
+  return(abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2))
+}
+
+# Function to check if a point is inside the triangle
+is_inside &lt;- function(x, y, x1, y1, x2, y2, x3, y3) {
+  # Calculate area of the triangle
+  triangle_area &lt;- area(x1, y1, x2, y2, x3, y3)
+  
+  # Calculate areas of sub-triangles formed by point and each triangle vertex
+  A1 &lt;- area(x, y, x2, y2, x3, y3)
+  A2 &lt;- area(x1, y1, x, y, x3, y3)
+  A3 &lt;- area(x1, y1, x2, y2, x, y)
+  
+  # Check if sum of sub-triangle areas equals main triangle area
+  return(abs(triangle_area - (A1 + A2 + A3)) &lt; 1e-6)
+}
+
+# add a column defining the zone of each instance  
+data %&lt;&gt;% 
+  lapply(function(x) {
+    x %&gt;% 
+      mutate(
+        # define the arms of the maze first 
+        zone = case_when(
+          head.y &gt;= y4 &amp; between(head.x, left = x3, right = x5)  ~ &quot;1&quot;, 
+          head.x &gt;= x4 &amp; between(head.y, left = y1, right = y4)  ~ &quot;2&quot;, 
+          head.x &lt;= x4 &amp; between(head.y, left = y1, right = y4)  ~ &quot;3&quot; 
+        ), 
+        # now define the central zone, overwriting the other zones if relevant 
+        zone = case_when(
+          is_inside(x = head.x, y = head.y, 
+                    x1 = x3, x2 = x5, x3 = x4, 
+                    y1 = y4, y2 = y4, y3 = y3) ~ &quot;4&quot; , 
+          TRUE ~ zone
+        ))
+  })
+    
+# Check this worke 
+data %&gt;% 
+  bind_rows() %&gt;% 
+  dplyr::filter(!is.na(head.x)) %&gt;% # omit instances where the head was not detected. 
+  dplyr::filter(fish_id %in% 2:11) %&gt;% 
+  ggplot(aes(
+    x = head.x, y = head.y, 
+    colour = zone 
+  )) + 
+  geom_point(
+    size = 4, 
+    alpha = 0.5
+  ) +
+  theme_linedraw() +
+  scale_x_continuous(
+    limits = c(0,200), 
+    breaks = seq(0, 200, by = 10)
+  ) + 
+    scale_y_continuous(
+    limits = c(0,200), 
+    breaks = seq(0, 200, by = 10)
+  ) +
+  theme(
+    aspect.ratio = 1
+  ) +
+  scale_color_viridis_d() +
+  facet_wrap(~fish_id)</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-8-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="distance-travelled" class="section level3">
+<h3>distance travelled</h3>
+<pre class="r"><code>data %&lt;&gt;% 
+  lapply(function(x) {
+    x %&gt;% 
+      dplyr::filter(!is.na(head.x)) %&gt;% # omit the fish with no head coordinates
+      mutate(
+        dx = head.x - lag(head.x, n = 1),
+        dy = head.y  - lag(head.y, n = 1)
+      ) %&gt;%
+      # Calculate the distance using Pythagoras&#39; theorem
+      mutate(
+        distance.pixels = sqrt(dx^2 + dy^2), 
+        distance.cm = distance.pixels / 22.5 # based on 2 cm = 45 pixels
+      )
+  })
+
+data %&gt;% 
+  bind_rows() %&gt;% 
+  ggplot(aes(x = frame_idx, y = distance.cm)) +
+  geom_smooth(aes(group = geno_treat, colour = geno_treat))</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-9-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="bins" class="section level3">
+<h3>bins</h3>
+<p>Each frame represents 2 seconds in this experiment. This is a weird
+thing i did in caputing this data. next analyses should be careful to
+make sure the representation is right. Calculated that 6 bins should
+capture the whole hour.</p>
+<pre class="r"><code>data %&lt;&gt;% 
+  lapply(function(x) {
+    x %&gt;% 
+      mutate(bin = ceiling(frame_idx / (120 * 10)), 
+             bin = as.factor(bin))
+  }) </code></pre>
+</div>
+<div id="setup-the-dataframe-nicely" class="section level3">
+<h3>setup the dataframe nicely</h3>
+<pre class="r"><code>data %&lt;&gt;% 
+  lapply(function(x) {
+    x %&gt;% 
+      dplyr::filter(frame_idx != 0) %&gt;% 
+      dplyr::select( # select rows of interest to the front 
+        frame_idx, bin, fish_id, geno_treat,sex, distance.cm, zone, video, position, everything()
+        )
+  }) </code></pre>
+</div>
+</div>
+</div>
+<div id="analysis-of-total-distance-travelled" class="section level1">
+<h1>Analysis of total distance travelled</h1>
+<div id="raw-distance-data-whole-hour" class="section level2">
+<h2>raw distance data: whole hour</h2>
+<p>I will first look at the total distance traveled in cm in an hour. No
+apparent differences between mutants.</p>
+<pre class="r"><code>data %&gt;% 
+  bind_rows() %&gt;% 
+  group_by(fish_id) %&gt;% # to calculate total distance travelled per fish. 
+  mutate(
+    total.dist.cm = sum(distance.cm), 
+    .after = distance.cm # put it in a visisble location
+    ) %&gt;% 
+  dplyr::distinct(fish_id, .keep_all = TRUE) %&gt;% 
+  ggplot(
+    aes(x = treatment, y = total.dist.cm, colour = genotype)
+    ) + 
+  geom_jitter() +
+  geom_boxplot() +
+  facet_wrap(~sex)</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-12-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="raw-distance-travelled-10-minute-bins" class="section level2">
+<h2>raw distance travelled: 10 minute bins</h2>
+<p>It is possible that the total distance travelled is the same, but
+perhaps the mutants behave differently across the hour in the test
+(e.g. different at the start v the end). This is not the case, and no
+stark differences are obsevred between the mutants.</p>
+<pre class="r"><code>data %&gt;% 
+  bind_rows() %&gt;% 
+  group_by(bin, fish_id) %&gt;% # to calculate total distance travelled per fish and bin.
+  mutate(
+    total.dist.cm = sum(distance.cm), 
+    .after = distance.cm # put it in a visisble location
+    ) %&gt;% 
+  dplyr::distinct(fish_id, bin, .keep_all = TRUE) %&gt;% 
+  ggplot(
+    aes(x = bin, y = total.dist.cm, colour = geno_treat)
+    ) + 
+  geom_jitter() +
+  geom_boxplot() +
+  facet_wrap(~sex+treatment)</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-13-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="statistical-test-linear-mixed-model" class="section level2">
+<h2>statistical test: linear mixed model</h2>
+<p>The total distance traveled per 10 minute data was fit to a linear
+mixed model. The effects of genotype, treatment, sex and bin were tested
+for statistical significance. However, no statistically significanct
+effect of genotype or treatment is is observed.</p>
+<pre class="r"><code># first, add the distnce data to the data object. 
+data %&lt;&gt;% 
+  bind_rows() %&gt;% 
+  group_by(bin, fish_id) %&gt;% # to calculate total distance travelled per fish and bin.
+  mutate(
+    total.dist.cm.perbin = sum(distance.cm), 
+    .after = distance.cm # put it in a visisble location
+    ) 
+
+fit.dists &lt;- 
+  data %&gt;% 
+  dplyr::distinct(fish_id, bin, .keep_all = TRUE) %&gt;% 
+  lmer(total.dist.cm.perbin ~ genotype*treatment*bin*sex + (1|behavBatch) +(1|fish_id), 
+       data = .)
+
+# check model assumptions
+# all look ok
+# check_model(fit.dists)
+
+# type II wald x2 test for statistical significnace of fixed effects
+an &lt;- Anova(fit.dists) %&gt;% signif(2)
+
+#emmeans(fit.dists, list(pairwise ~ genotype * treatment * sex), adjust = &quot;tukey&quot;)
+
+# geno treat sex
+emmeans(fit.dists, ~ genotype * treatment * sex, type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(aes(x = treatment, y = emmean, colour = genotype)) +
+  geom_col(
+    aes(fill = genotype), 
+    alpha = 0.75,
+    width = 0.75,
+    position = position_dodge(width = 0.75)
+  ) +
+  geom_errorbar(
+    aes(ymin =  lower.CL, ymax = upper.CL),
+    width = 0.5, 
+    position = position_dodge(width = 0.75)
+    ) +
+  facet_wrap(~sex, nrow = 1) + 
+  scale_color_manual(values = c(&quot;grey50&quot;, &quot;orangered&quot;)) +
+  scale_fill_manual(values = c(&quot;grey50&quot;, &quot;orangered&quot;)) +
+  labs(
+    title = &quot;Total distance travelled per genotype, treatment and sex&quot;, 
+    subtitle = paste0(&quot;p = &quot;, an[&#39;genotype:treatment:sex&#39;,&#39;Pr(&gt;Chisq)&#39;]), 
+    y = &quot;Model-predicted total distance travelled (cm)&quot;
+  )</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-14-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># geno treat
+print(emmeans(fit.dists, ~ genotype * treatment), type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(
+    aes(x = treatment, y = emmean/100, colour = genotype)
+  ) +
+  geom_col(
+    aes(fill = genotype), 
+    alpha = 0.75,
+    position = position_dodge(width = 1)) +
+  geom_errorbar(
+    aes(ymin =  lower.CL/100, ymax = upper.CL/100),
+    width = 0.5,
+    size = 1,
+    position = position_dodge(width = 1)
+  ) +
+  facet_wrap(~treatment, nrow = 1, scales = &quot;free_x&quot;) +
+  scale_color_manual(values = c(&quot;grey50&quot;, &quot;orangered&quot;)) +
+  scale_fill_manual(values = c(&quot;grey50&quot;, &quot;orangered&quot;)) +
+  labs(
+    title = &quot;Total distance travelled per genotype, treatment&quot;, 
+    subtitle = paste0(&quot;p = &quot;, an[&#39;genotype:treatment&#39;,&#39;Pr(&gt;Chisq)&#39;]), 
+    y = &quot;Model-predicted total distance travelled (cm)&quot;
+  )</code></pre>
+<pre><code> genotype treatment        emmean   SE   df lower.CL upper.CL
+ het      untreated          1423 76.2 58.2     1271     1575
+ hom      untreated          1412 81.6 61.7     1248     1575
+ het      20 µM Salbutamol   1269 80.2 57.9     1109     1430
+ hom      20 µM Salbutamol   1235 80.5 60.7     1074     1396
+
+Results are averaged over the levels of: bin, sex 
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 </code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-14-2.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># geno treat bin
+print(emmeans(fit.dists, ~ genotype * treatment * bin * sex), 
+      type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  mutate(group = paste0(genotype, &quot;_&quot;, 
+                        treatment, &quot;_&quot;, 
+                        sex), 
+         genotreat = paste0(genotype, &quot;_&quot;, treatment)) %&gt;% 
+  dplyr::filter(genotreat != &quot;het_20 µM Salbutamol&quot;) %&gt;% 
+  ggplot(aes(x = bin, y = emmean, colour = genotreat)) +
+  geom_point(
+    aes(fill =group), 
+    alpha = 0.75,
+    position = position_dodge(width = 0.75)
+    ) +
+  geom_errorbar(
+    aes(ymin =  lower.CL, ymax = upper.CL),
+    position = position_dodge(0.75)
+    ) +
+  geom_line(
+    aes(group = group), 
+    position = position_dodge(0.75),
+    show.legend = F
+    ) +
+  facet_wrap(~sex, scales = &quot;free_x&quot;) +
+  scale_color_viridis_d(option = &quot;turbo&quot;, end = 0.9) +
+  scale_fill_viridis_d(option = &quot;turbo&quot;, end = 0.9) +
+  labs(
+    title = &quot;Total distance travelled per genotype, treatment, sex and bin &quot;, 
+    subtitle = paste0(&quot;p = &quot;, an[&#39;genotype:treatment:bin:sex&#39;,&#39;Pr(&gt;Chisq)&#39;]), 
+    y = &quot;Model-predicted total distance travelled (cm)&quot;
+  )</code></pre>
+<pre><code> genotype treatment        bin sex emmean  SE  df lower.CL upper.CL
+ het      untreated        1   f     1520 136 148     1251     1789
+ hom      untreated        1   f     1557 116 133     1328     1786
+ het      20 µM Salbutamol 1   f     1496 144 147     1212     1781
+ hom      20 µM Salbutamol 1   f     1421 131 139     1163     1680
+ het      untreated        2   f     1545 136 148     1276     1814
+ hom      untreated        2   f     1577 116 133     1348     1806
+ het      20 µM Salbutamol 2   f     1468 144 147     1183     1753
+ hom      20 µM Salbutamol 2   f     1424 131 139     1165     1683
+ het      untreated        3   f     1443 136 148     1173     1712
+ hom      untreated        3   f     1545 116 133     1316     1774
+ het      20 µM Salbutamol 3   f     1487 144 147     1203     1772
+ hom      20 µM Salbutamol 3   f     1296 131 139     1037     1554
+ het      untreated        4   f     1353 136 148     1083     1622
+ hom      untreated        4   f     1516 116 133     1287     1745
+ het      20 µM Salbutamol 4   f     1390 144 147     1105     1675
+ hom      20 µM Salbutamol 4   f     1160 131 139      901     1419
+ het      untreated        5   f     1351 136 148     1082     1620
+ hom      untreated        5   f     1435 116 133     1206     1664
+ het      20 µM Salbutamol 5   f     1328 144 147     1044     1613
+ hom      20 µM Salbutamol 5   f     1246 131 139      987     1504
+ het      untreated        6   f      741 136 148      472     1010
+ hom      untreated        6   f      766 116 133      537      995
+ het      20 µM Salbutamol 6   f      651 144 147      366      935
+ hom      20 µM Salbutamol 6   f      691 131 139      432      949
+ het      untreated        1   m     1675 117 149     1444     1906
+ hom      untreated        1   m     1589 153 147     1286     1892
+ het      20 µM Salbutamol 1   m     1353 121 131     1115     1592
+ hom      20 µM Salbutamol 1   m     1293 136 147     1024     1563
+ het      untreated        2   m     1639 115 141     1412     1867
+ hom      untreated        2   m     1527 153 147     1224     1830
+ het      20 µM Salbutamol 2   m     1329 121 131     1090     1567
+ hom      20 µM Salbutamol 2   m     1338 136 147     1069     1608
+ het      untreated        3   m     1586 115 141     1358     1813
+ hom      untreated        3   m     1474 153 147     1172     1777
+ het      20 µM Salbutamol 3   m     1318 121 131     1079     1556
+ hom      20 µM Salbutamol 3   m     1461 136 147     1192     1731
+ het      untreated        4   m     1643 115 141     1416     1871
+ hom      untreated        4   m     1533 153 147     1230     1836
+ het      20 µM Salbutamol 4   m     1293 121 131     1055     1532
+ hom      20 µM Salbutamol 4   m     1436 136 147     1166     1705
+ het      untreated        5   m     1655 115 141     1427     1882
+ hom      untreated        5   m     1568 153 147     1265     1871
+ het      20 µM Salbutamol 5   m     1401 121 131     1163     1640
+ hom      20 µM Salbutamol 5   m     1305 136 147     1036     1574
+ het      untreated        6   m      926 115 141      699     1154
+ hom      untreated        6   m      851 153 147      548     1154
+ het      20 µM Salbutamol 6   m      714 121 131      475      952
+ hom      20 µM Salbutamol 6   m      750 136 147      481     1020
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 </code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-14-3.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="analysis-of-time-spent-moving" class="section level1">
+<h1>Analysis of time spent moving</h1>
+<div id="raw-data-whole-hour" class="section level2">
+<h2>raw data: whole hour</h2>
+<p>It is possible that while the distance traveled is not affected
+between mutant genotypes, but the time spent moving is. For example, the
+normal fish might have constant movement but the mutant fish might stop
+start.</p>
+<p>I first need to define whether a fish is considered moving or not.
+After watching some of the videos, I will consider a fish moving if it
+moves more than 0.4 cm per frame (i.e. &gt; 0.2 cm/s)</p>
+<pre class="r"><code>moving.threshold = 0.4</code></pre>
+<pre class="r"><code>data %&gt;% 
+  bind_rows() %&gt;% 
+  group_by(fish_id) %&gt;% # to calculate time moving per fish. 
+  mutate(
+    moving = case_when(
+      distance.cm &lt; moving.threshold ~ FALSE, 
+      distance.cm &gt;= moving.threshold ~ TRUE, 
+      TRUE ~ NA # all other vals make NA
+    ),
+    prop.moving.all = mean(moving == T), # calculate the proportion of time moving over the whole hour. 
+    .after = distance.cm # put it in a visisble location
+    ) %&gt;% 
+  
+  dplyr::distinct(fish_id, .keep_all = TRUE) %&gt;% 
+  ggplot(
+    aes(x = treatment, y = prop.moving.all, colour = genotype)
+    ) + 
+  geom_point(
+   position = position_jitterdodge(dodge.width = 1)
+    ) +
+  geom_boxplot(
+    position = position_dodge(width = 1),
+    outlier.shape = NA, 
+    fill = NA
+    ) +
+  scale_color_manual(values = c(&quot;grey50&quot;, &quot;#d62906&quot;)) +
+  facet_wrap(~sex)</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-16-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="raw-data-10-minute-bins" class="section level2">
+<h2>raw data: 10 minute bins</h2>
+<p>Like the distance travelled, the proportion of time spent moving
+could also change across the hour. Generally the fish spend less time
+moving in the final bin. But not much difference between genotypes.</p>
+<pre class="r"><code>data %&gt;% 
+  bind_rows() %&gt;% 
+  group_by(bin, fish_id) %&gt;% # to calculate total distance travelled per fish and bin.
+  mutate(
+    moving = case_when(
+      distance.cm &lt; moving.threshold ~ FALSE, 
+      distance.cm &gt;= moving.threshold ~ TRUE, 
+      TRUE ~ NA # all other vals make NA
+    ),
+    prop.moving.bin = mean(moving == T), # calculate the proportion of time moving over the whole hour. 
+    .after = distance.cm # put it in a visisble location
+  ) %&gt;% 
+  dplyr::distinct(fish_id, bin, .keep_all = TRUE) %&gt;% 
+  ggplot(
+    aes(x = bin, y = prop.moving.bin, colour = geno_treat)
+  ) + 
+  geom_point(
+    position = position_jitterdodge(dodge.width = 1)
+  ) +
+  geom_boxplot(
+    position = position_dodge(width = 1),
+    outlier.shape = NA, 
+    fill = NA
+  ) +
+  facet_wrap(~sex+bin, scales = &quot;free_x&quot;, nrow = 2)</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-17-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="statistical-test-generalised-linear-mixed-model-beta-dist"
+class="section level2">
+<h2>statistical test: generalised linear mixed model (beta-dist)</h2>
+<p>Proportion of time spend moving data was fitted to a generalised
+linear mixed model with a beta distribution and logit link function.</p>
+<p>A statistically significant effect of treatment (and bin) was found,
+but not of genotype.</p>
+<pre class="r"><code># first add the prop.moving data to the object. 
+data %&lt;&gt;% 
+  bind_rows() %&gt;% 
+  group_by(bin, fish_id) %&gt;% # to calculate total distance travelled per fish and bin.
+  mutate(
+    moving = case_when(
+      distance.cm &lt; moving.threshold ~ FALSE, 
+      distance.cm &gt;= moving.threshold ~ TRUE, 
+      TRUE ~ NA # all other vals make NA
+    ),
+    prop.moving.bin = mean(moving == T), # calculate the proportion of time moving over the whole hour. 
+    .after = distance.cm # put it in a visisble location
+  ) 
+
+fit.time.moving &lt;- 
+  data %&gt;% 
+  mutate( # adding a small number as beta dists cannot handle 0&#39;s
+    prop.moving.bin = prop.moving.bin + 0.0000001 
+  ) %&gt;% 
+  dplyr::distinct(fish_id, bin, .keep_all = TRUE) %&gt;% 
+  glmmTMB(prop.moving.bin ~ genotype*treatment*bin*sex + (1|behavBatch) +(1|fish_id), 
+       data = ., 
+       family = beta_family(link=&quot;logit&quot;))
+
+# check model assumptions
+# check_model(fit.time.moving)
+
+# Type II Wald chisquare test of fixed effects
+an.moving &lt;- Anova(fit.time.moving) %&gt;% signif(2)
+
+# geno treat sex
+emmeans(fit.time.moving, ~ genotype * treatment * sex, type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(aes(x = treatment, y = response, colour = genotype)) +
+  geom_col(
+    aes(fill = genotype), 
+    alpha = 0.75,
+    width = 0.75,
+    position = position_dodge(width = 0.75)
+  ) +
+  geom_errorbar(
+    aes(ymin =  asymp.LCL, ymax = asymp.UCL),
+    width = 0.5, 
+    position = position_dodge(width = 0.75)
+    ) +
+  facet_wrap(~sex, nrow = 1) + 
+  scale_color_manual(values = c(&quot;grey50&quot;, &quot;orangered&quot;)) +
+  scale_fill_manual(values = c(&quot;grey50&quot;, &quot;orangered&quot;)) +
+  labs(
+    title = &quot;Proportion of time-spent moving travelled per genotype, treatment and sex&quot;, 
+    subtitle = paste0(&quot;p = &quot;, an.moving[&#39;genotype:treatment:sex&#39;,&#39;Pr(&gt;Chisq)&#39;]), 
+    y = &quot;Model-predicted proportion of time spent moving in Ymaze&quot;
+  )</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-18-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># geno treat
+emmeans(fit.time.moving, ~ genotype * treatment, type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  ggplot(
+    aes(x = treatment, y = response, colour = genotype)
+  ) +
+  geom_col(
+    aes(fill = genotype), 
+    alpha = 0.75,
+    position = position_dodge(width = 1)) +
+  geom_errorbar(
+    aes(ymin =  asymp.LCL, ymax = asymp.UCL),
+    width = 0.5,
+    size = 1,
+    position = position_dodge(width = 1)
+  ) +
+  facet_wrap(~treatment, nrow = 1, scales = &quot;free_x&quot;) +
+  scale_color_manual(values = c(&quot;grey50&quot;, &quot;orangered&quot;)) +
+  scale_fill_manual(values = c(&quot;grey50&quot;, &quot;orangered&quot;)) +
+  labs(
+    title = &quot;Proportion of time-spent moving travelled per genotype, treatment&quot;, 
+    subtitle = paste0(&quot;p = &quot;, an.moving[&#39;genotype:treatment&#39;,&#39;Pr(&gt;Chisq)&#39;]), 
+    y = &quot;Model-predicted proportion of time spent moving in Ymaze&quot;
+  )</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-18-2.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># geno treat bin
+emmeans(fit.time.moving, ~ genotype * treatment * bin * sex, 
+      type = &quot;response&quot;) %&gt;% 
+  as_tibble() %&gt;% 
+  mutate(group = paste0(genotype, &quot;_&quot;, 
+                        treatment, &quot;_&quot;, 
+                        sex), 
+         genotreat = paste0(genotype, &quot;_&quot;, treatment)) %&gt;% 
+  dplyr::filter(genotreat != &quot;het_20 µM Salbutamol&quot;) %&gt;% 
+  ggplot(aes(x = bin, y = response, colour = genotreat)) +
+  geom_point(
+    aes(fill =group), 
+    alpha = 0.75,
+    position = position_dodge(width = 0.75)
+    ) +
+  geom_errorbar(
+    aes(ymin =  asymp.LCL , ymax = asymp.UCL ),
+    position = position_dodge(0.75)
+    ) +
+  geom_line(
+    aes(group = group), 
+    position = position_dodge(0.75),
+    show.legend = F
+    ) +
+  facet_wrap(~sex, scales = &quot;free_x&quot;) +
+  labs(
+    title = &quot;Total distance travelled per genotype, treatment, sex and bin &quot;, 
+    subtitle = paste0(&quot;p = &quot;, an.moving[&#39;genotype:treatment:bin:sex&#39;,&#39;Pr(&gt;Chisq)&#39;]), 
+    y = &quot;Model-predicted proportion of time spent moving&quot;
+  )</code></pre>
+<p><img src="figure/sleapdata_exp1_3.rmd/unnamed-chunk-18-3.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.3.2 (2023-10-31)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Sonoma 14.3
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Australia/Adelaide
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] MASS_7.3-60.0.1    glmmTMB_1.1.8      emmeans_1.10.0     car_3.1-2         
+ [5] carData_3.0-5      performance_0.10.9 lme4_1.1-35.1      Matrix_1.6-5      
+ [9] broom_1.0.5        pander_0.6.5       kableExtra_1.4.0   gganimate_1.0.9   
+[13] ggrepel_0.9.5      ggforce_0.4.2      ggbeeswarm_0.7.2   ggfortify_0.4.16  
+[17] ggeasy_0.1.4       ggpubr_0.6.0       scales_1.3.0       magrittr_2.0.3    
+[21] here_1.0.1         readxl_1.4.3       lubridate_1.9.3    forcats_1.0.0     
+[25] stringr_1.5.1      dplyr_1.1.4        purrr_1.0.2        readr_2.1.5       
+[29] tidyr_1.3.1        tibble_3.2.1       ggplot2_3.5.0      tidyverse_2.0.0   
+
+loaded via a namespace (and not attached):
+ [1] gridExtra_2.3       rlang_1.1.3         git2r_0.33.0       
+ [4] compiler_4.3.2      mgcv_1.9-1          systemfonts_1.0.6  
+ [7] vctrs_0.6.5         pkgconfig_2.0.3     crayon_1.5.2       
+[10] fastmap_1.1.1       backports_1.4.1     labeling_0.4.3     
+[13] utf8_1.2.4          promises_1.2.1      rmarkdown_2.26     
+[16] tzdb_0.4.0          nloptr_2.0.3        bit_4.0.5          
+[19] xfun_0.42           cachem_1.0.8        jsonlite_1.8.8     
+[22] progress_1.2.3      highr_0.10          later_1.3.2        
+[25] tweenr_2.0.3        parallel_4.3.2      prettyunits_1.2.0  
+[28] R6_2.5.1            bslib_0.6.1         stringi_1.8.3      
+[31] boot_1.3-30         numDeriv_2016.8-1.1 jquerylib_0.1.4    
+[34] cellranger_1.1.0    estimability_1.5    Rcpp_1.0.12        
+[37] knitr_1.45          httpuv_1.6.14       splines_4.3.2      
+[40] timechange_0.3.0    tidyselect_1.2.0    rstudioapi_0.15.0  
+[43] abind_1.4-5         yaml_2.3.8          TMB_1.9.10         
+[46] lattice_0.22-5      withr_3.0.0         evaluate_0.23      
+[49] polyclip_1.10-6     xml2_1.3.6          pillar_1.9.0       
+[52] whisker_0.4.1       insight_0.19.8      generics_0.1.3     
+[55] vroom_1.6.5         rprojroot_2.0.4     hms_1.1.3          
+[58] munsell_0.5.0       minqa_1.2.6         xtable_1.8-4       
+[61] glue_1.7.0          tools_4.3.2         ggsignif_0.6.4     
+[64] fs_1.6.3            mvtnorm_1.2-4       grid_4.3.2         
+[67] colorspace_2.1-0    nlme_3.1-164        beeswarm_0.4.0     
+[70] vipor_0.4.7         cli_3.6.2           workflowr_1.7.1    
+[73] fansi_1.0.6         viridisLite_0.4.2   svglite_2.1.3      
+[76] gtable_0.3.4        rstatix_0.7.2       sass_0.4.8         
+[79] digest_0.6.34       pbkrtest_0.5.2      gifski_1.12.0-2    
+[82] farver_2.1.1        htmltools_0.5.7     lifecycle_1.0.4    
+[85] bit64_4.0.5        </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
