@@ -450,19 +450,141 @@ Each frame represents 2 seconds in this experiment. This is a weird thing i did 
 data %<>% 
   lapply(function(x) {
     x %>% 
-      mutate(bin = ceiling(frame_idx / (120 * 10)))
+      mutate(bin = ceiling(frame_idx / (120 * 10)), 
+             bin = as.factor(bin))
   }) 
 ```
 
-# Analysis of total distance travelled
+### setup the dataframe nicely
 
-I will first look at the total distance travelled in cm. 
 ```{r}
-data %>% 
-  bind_rows()
-  
+data %<>% 
+  lapply(function(x) {
+    x %>% 
+      dplyr::filter(frame_idx != 0) %>% 
+      dplyr::select( # select rows of interest to the front 
+        frame_idx, bin, fish_id, genotype, treatment, distance.cm, zone, video, position, everything()
+        )
+  }) 
 ```
 
+
+# Analysis of total distance travelled
+
+## raw distance data: whole hour
+I will first look at the total distance traveled in cm in an hour. No apparent differences between mutants. 
+
+```{r}
+data %>% 
+  bind_rows() %>% 
+  group_by(fish_id) %>% # to calculate total distance travelled per fish. 
+  mutate(
+    total.dist.cm = sum(distance.cm), 
+    .after = distance.cm # put it in a visisble location
+    ) %>% 
+  dplyr::distinct(fish_id, .keep_all = TRUE) %>% 
+  ggplot(
+    aes(x = treatment, y = total.dist.cm, colour = genotype)
+    ) + 
+  geom_jitter() +
+  geom_boxplot() +
+  facet_wrap(~sex)
+```
+
+## raw distance travelled: 10 minute bins
+
+It is possible that the total distance travelled is the same, but perhaps the mutants behave differently across the hour in the test (e.g. different at the start v the end).  This is not the case, and no stark differences are obsevred between the mutants. 
+
+```{r}
+data %>% 
+  bind_rows() %>% 
+  group_by(bin, fish_id) %>% # to calculate total distance travelled per fish and bin.
+  mutate(
+    total.dist.cm = sum(distance.cm), 
+    .after = distance.cm # put it in a visisble location
+    ) %>% 
+  dplyr::distinct(fish_id, bin, .keep_all = TRUE) %>% 
+  ggplot(
+    aes(x = bin, y = total.dist.cm, colour = geno_treat)
+    ) + 
+  geom_jitter() +
+  geom_boxplot() +
+  facet_wrap(~sex+treatment)
+```
+
+## statistical test 
+
+The total distance traveled per 10 minute data was fit to a linear mixed model. The effects of genotype, treatment, sex and bin were tested for statistical significance. However, no effect of genotype is observed. 
+
+```{r}
+fit.dists <- 
+  data %>% 
+  bind_rows() %>% 
+  group_by(bin, fish_id) %>% # to calculate total distance travelled per fish and bin.
+  mutate(
+    total.dist.cm = sum(distance.cm), 
+    .after = distance.cm # put it in a visisble location
+    ) %>%
+  dplyr::distinct(fish_id, bin, .keep_all = TRUE) %>% 
+  lmer(total.dist.cm ~ genotype + treatment + bin + sex + (1|behavBatch) +(1|fish_id), 
+       data = .)
+
+# check assumptions
+# all look ok
+check_model(fit.dists)
+
+
+an <- Anova(fit.dists)
+
+emmeans(fit.dists, list(pairwise ~ genotype * treatment * sex), adjust = "tukey")
+
+# geno treat sex
+print(emmeans(fit.dists, ~ genotype * treatment * sex), type = "response") %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = treatment, y = emmean, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.75,
+           width = 0.75,
+           position = position_dodge(width = 0.75)) +
+  geom_errorbar(aes(ymin =  lower.CL, ymax = upper.CL),
+                width = 0.5, 
+                position = position_dodge(width = 0.75)) +
+  facet_wrap(~sex, nrow = 1)
+
+# geno treat
+print(emmeans(fit.dists, ~ genotype * treatment), type = "response") %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = treatment, y = emmean/100, colour = genotype)) +
+  geom_col(aes(fill = genotype), 
+           alpha = 0.75,
+           position = position_dodge()) +
+  geom_errorbar(aes(ymin =  lower.CL/100, ymax = upper.CL/100),
+                position = position_dodge()) +
+  facet_wrap(~treatment, nrow = 1, scales = "free_x") +
+  labs(title = "7 days on salbutamol", 
+       y = "Average distance travelled\nper 10 min bin (cm)") 
+
+# geno treat bin
+print(emmeans(fit.dists, ~ genotype * treatment * bin * sex), 
+      type = "response") %>% 
+  as_tibble() %>% 
+  mutate(group = paste0(genotype, "_", 
+                        treatment, "_", 
+                        sex), 
+         genotreat = paste0(genotype, "_", treatment)) %>% 
+  dplyr::filter(genotreat != "het_20 µM Salbutamol") %>% 
+  ggplot(aes(x = bin, y = emmean, colour = genotreat)) +
+  geom_point(aes(fill =group), 
+           alpha = 0.75,
+           position = position_dodge(width = 0.75)) +
+  geom_errorbar(aes(ymin =  lower.CL, ymax = upper.CL),
+                position = position_dodge(0.75)) +
+  geom_line(aes(group = group), 
+            position = position_dodge(0.75),
+            show.legend = F) +
+  facet_wrap(~sex, 
+             scales = "free_x")
+```
 
 
 
